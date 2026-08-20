@@ -57,54 +57,50 @@ jobs:
 
             const latestCommit = commits.data[0];
 
+            const summary = `
+            🚀 DEPLOYMENT REQUEST SUMMARY
+
+            Request Information
+            ===================
+
+            Request ID: #${issueNumber}
+            Requested By: @${context.payload.issue.user.login}
+            Repository: ${context.repo.repo}
+            Repository Owner: ${context.repo.owner}
+
+            Technical Information
+            =====================
+
+            Branch: ${context.payload.repository.default_branch}
+            Workflow Run Number: ${process.env.GITHUB_RUN_NUMBER}
+            Latest Commit SHA: ${latestCommit.sha}
+            Commit Author: ${latestCommit.commit.author.name}
+            Commit Message: ${latestCommit.commit.message}
+
+            Approval Matrix
+            ===============
+
+            L1: Pending
+            L2: Pending
+            L3: Pending
+
+            Deployment Status
+            =================
+
+            Awaiting L1 Approval
+
+            Audit Information
+            =================
+
+            Issue URL: ${context.payload.issue.html_url}
+            Created At: ${context.payload.issue.created_at}
+
+            Deployment request successfully registered and entered into the approval workflow.
+            `;
+
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: issueNumber,
-              body: `
-# 🚀 Deployment Request Summary
-
-## Request Information
-
-- Request ID: #${issueNumber}
-- Requested By: @${context.payload.issue.user.login}
-- Repository: ${context.repo.repo}
-- Repository Owner: ${context.repo.owner}
-
----
-
-## Technical Information
-
-- Branch: ${context.payload.repository.default_branch}
-- Workflow Run Number: ${process.env.GITHUB_RUN_NUMBER}
-- Latest Commit SHA: ${latestCommit.sha}
-- Commit Author: ${latestCommit.commit.author.name}
-- Commit Message: ${latestCommit.commit.message}
-
----
-
-## Approval Matrix
-
-| Level | Status |
-|--------|--------|
-| L1 | ⏳ Pending |
-| L2 | ⏳ Pending |
-| L3 | ⏳ Pending |
-
----
-
-## Deployment Status
-
-🟡 Awaiting L1 Approval
-
----
-
-## Audit Information
-
-- Issue URL: ${context.payload.issue.html_url}
-- Created At: ${context.payload.issue.created_at}
-
----
-✅ Deployment request successfully registered and entered into the approval workflow.
-`
+              body: summary
             });
