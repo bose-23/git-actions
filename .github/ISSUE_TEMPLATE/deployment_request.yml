@@ -1,0 +1,48 @@
+name: Deployment Request
+description: Submit a deployment request
+title: "[DEPLOYMENT] "
+labels:
+  - new-request
+
+body:
+  - type: input
+    id: service_name
+    attributes:
+      label: Service Name
+      placeholder: document-consumer-service
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      options:
+        - DEV
+        - UAT
+        - PREPROD
+        - PROD
+    validations:
+      required: true
+
+  - type: input
+    id: approver
+    attributes:
+      label: Approver
+      placeholder: Manager name
+    validations:
+      required: true
+
+  - type: textarea
+    id: change_description
+    attributes:
+      label: Change Description
+    validations:
+      required: true
+
+  - type: textarea
+    id: rollback_plan
+    attributes:
+      label: Rollback Plan
+    validations:
+      required: true
