@@ -1,5 +1,5 @@
 name: Deployment Request
-description: Submit a deployment request
+description: Submit a deployment/change request
 title: "[DEPLOYMENT] "
 labels:
   - new-request
@@ -9,6 +9,7 @@ body:
     id: service_name
     attributes:
       label: Service Name
+      description: Name of the application/service to be deployed
       placeholder: document-consumer-service
     validations:
       required: true
@@ -16,7 +17,7 @@ body:
   - type: dropdown
     id: environment
     attributes:
-      label: Environment
+      label: Target Environment
       options:
         - DEV
         - UAT
@@ -25,11 +26,50 @@ body:
     validations:
       required: true
 
-  - type: input
-    id: approver
+  - type: dropdown
+    id: risk_level
     attributes:
-      label: Approver
-      placeholder: Manager name
+      label: Risk Level
+      options:
+        - Low
+        - Medium
+        - High
+    validations:
+      required: true
+
+  - type: input
+    id: deployment_window
+    attributes:
+      label: Deployment Window
+      description: Planned deployment date and time
+      placeholder: "21-Aug-2026 10:00 PM IST"
+    validations:
+      required: true
+
+  - type: input
+    id: l1_approver
+    attributes:
+      label: L1 Approver
+      description: Team Lead / Initial Approval
+      placeholder: GitHub Username
+    validations:
+      required: true
+
+  - type: input
+    id: l2_approver
+    attributes:
+      label: L2 Approver
+      description: Engineering Manager Approval
+      placeholder: GitHub Username
+    validations:
+      required: true
+
+  - type: input
+    id: l3_approver
+    attributes:
+      label: L3 Approver
+      description: Release Manager / Final Approval
+      placeholder: GitHub Username
     validations:
       required: true
 
@@ -37,6 +77,35 @@ body:
     id: change_description
     attributes:
       label: Change Description
+      description: What is being changed?
+      placeholder: Describe the deployment/change being introduced.
+    validations:
+      required: true
+
+  - type: textarea
+    id: business_justification
+    attributes:
+      label: Business Justification
+      description: Why is this change required?
+      placeholder: Explain the reason and expected business benefit.
+    validations:
+      required: true
+
+  - type: textarea
+    id: testing_details
+    attributes:
+      label: Testing Details
+      description: Mention testing performed before deployment
+      placeholder: Unit testing, integration testing, UAT validation, etc.
+    validations:
+      required: true
+
+  - type: textarea
+    id: impacted_components
+    attributes:
+      label: Impacted Components
+      description: Applications, services, APIs or modules affected by this deployment
+      placeholder: List impacted systems.
     validations:
       required: true
 
@@ -44,5 +113,45 @@ body:
     id: rollback_plan
     attributes:
       label: Rollback Plan
+      description: How will the deployment be reverted if issues occur?
+      placeholder: Roll back to previous stable release.
     validations:
       required: true
+
+  - type: textarea
+    id: implementation_steps
+    attributes:
+      label: Implementation Steps
+      description: High-level deployment procedure
+      placeholder: |
+        1. Take backup
+        2. Deploy artifact
+        3. Verify application health
+        4. Perform smoke testing
+    validations:
+      required: true
+
+  - type: textarea
+    id: validation_steps
+    attributes:
+      label: Post Deployment Validation
+      description: How will the deployment be validated after release?
+      placeholder: Smoke tests, API validation, UI validation, monitoring checks, etc.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Pre-Deployment Checklist
+      options:
+        - label: Testing has been completed
+          required: true
+        - label: Rollback plan is available
+          required: true
+        - label: Required stakeholders have been informed
+          required: true
+        - label: Change documentation is available
+          required: true
+        - label: Deployment window has been approved
+          required: true
