@@ -7,6 +7,7 @@ on:
 
 permissions:
   issues: write
+  contents: write
 
 jobs:
   process-approval:
@@ -62,7 +63,9 @@ jobs:
               });
             }
 
+            // ======================
             // L1 APPROVAL
+            // ======================
 
             if (comment === "/approve-l1") {
 
@@ -121,7 +124,9 @@ jobs:
               return;
             }
 
+            // ======================
             // L2 APPROVAL
+            // ======================
 
             if (comment === "/approve-l2") {
 
@@ -180,7 +185,9 @@ jobs:
               return;
             }
 
+            // ======================
             // L3 APPROVAL
+            // ======================
 
             if (comment === "/approve-l3") {
 
@@ -219,6 +226,39 @@ jobs:
                 ]
               });
 
+              const releaseTag = "deployment-request-" + issueNumber;
+
+              try {
+
+                await github.rest.repos.createRelease({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  tag_name: releaseTag,
+                  name: "Deployment Request #" + issueNumber,
+                  body:
+                    "Deployment Approval Completed\n\n" +
+                    "Issue Number: #" + issueNumber +
+                    "\nApproved By: @" + commenter +
+                    "\nRepository: " + context.repo.repo +
+                    "\n\nApproval Chain" +
+                    "\nL1 Approved" +
+                    "\nL2 Approved" +
+                    "\nL3 Approved"
+                });
+
+              } catch (error) {
+                console.log(error);
+              }
+
+              try {
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber,
+                  labels: ["released"]
+                });
+              } catch (error) {}
+
               await addComment(
                 "L3 Approved by @" + commenter +
                 "\n\nApproval Status" +
@@ -228,13 +268,18 @@ jobs:
                 "\nL3: Approved" +
                 "\n\nCurrent Stage" +
                 "\n--------------" +
-                "\nDeployment Ready"
+                "\nReleased" +
+                "\n\nRelease Created" +
+                "\n---------------" +
+                "\nTag: " + releaseTag
               );
 
               return;
             }
 
-            // REJECTIONS
+            // ======================
+            // REJECTION FLOW
+            // ======================
 
             if (
               comment === "/reject-l1" ||
