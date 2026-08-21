@@ -32,7 +32,11 @@ jobs:
             const body = issue.data.body || "";
 
             function extractApprover(fieldName) {
-              const regex = new RegExp(fieldName + "\\s*\\n([^\\n]+)", "i");
+              const regex = new RegExp(
+                fieldName + "\\s*\\n([^\\n]+)",
+                "i"
+              );
+
               const match = body.match(regex);
 
               if (!match) {
@@ -42,9 +46,37 @@ jobs:
               return match[1].trim().replace("@", "");
             }
 
+            function extractField(fieldName) {
+
+              const regex = new RegExp(
+                fieldName + "\\s*\\n([^\\n]+)",
+                "i"
+              );
+
+              const match = body.match(regex);
+
+              if (!match) {
+                return "Not Provided";
+              }
+
+              return match[1].trim();
+            }
+
             const l1Approver = extractApprover("L1 Approver");
             const l2Approver = extractApprover("L2 Approver");
             const l3Approver = extractApprover("L3 Approver");
+
+            const serviceName = extractField("Service Name");
+            const environment = extractField("Target Environment");
+            const riskLevel = extractField("Risk Level");
+            const deploymentWindow = extractField("Deployment Window");
+            const changeDescription = extractField("Change Description");
+            const businessJustification = extractField("Business Justification");
+            const testingDetails = extractField("Testing Details");
+            const impactedComponents = extractField("Impacted Components");
+            const rollbackPlan = extractField("Rollback Plan");
+            const implementationSteps = extractField("Implementation Steps");
+            const validationSteps = extractField("Post Deployment Validation");
 
             const labelsResponse = await github.rest.issues.listLabelsOnIssue({
               owner: context.repo.owner,
@@ -52,7 +84,9 @@ jobs:
               issue_number: issueNumber
             });
 
-            const labels = labelsResponse.data.map(label => label.name);
+            const labels = labelsResponse.data.map(
+              label => label.name
+            );
 
             async function addComment(message) {
               await github.rest.issues.createComment({
@@ -117,8 +151,7 @@ jobs:
                 "\n\nAction Required" +
                 "\n---------------" +
                 "\n@" + l2Approver +
-                "\n\nUse:" +
-                "\n/approve-l2"
+                "\n\nUse:\n/approve-l2"
               );
 
               return;
@@ -178,8 +211,7 @@ jobs:
                 "\n\nAction Required" +
                 "\n---------------" +
                 "\n@" + l3Approver +
-                "\n\nUse:" +
-                "\n/approve-l3"
+                "\n\nUse:\n/approve-l3"
               );
 
               return;
@@ -226,24 +258,67 @@ jobs:
                 ]
               });
 
-              const releaseTag = "deployment-request-" + issueNumber;
+              const releaseTag =
+                "deployment-request-" + issueNumber;
 
               try {
 
                 await github.rest.repos.createRelease({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
+
                   tag_name: releaseTag,
-                  name: "Deployment Request #" + issueNumber,
+
+                  name:
+                    "Deployment Request #" +
+                    issueNumber,
+
                   body:
-                    "Deployment Approval Completed\n\n" +
-                    "Issue Number: #" + issueNumber +
-                    "\nApproved By: @" + commenter +
-                    "\nRepository: " + context.repo.repo +
-                    "\n\nApproval Chain" +
-                    "\nL1 Approved" +
-                    "\nL2 Approved" +
-                    "\nL3 Approved"
+                    "# DEPLOYMENT RECORD\n\n" +
+
+                    "## Request Information\n\n" +
+
+                    "- Issue Number: #" + issueNumber +
+                    "\n- Service Name: " + serviceName +
+                    "\n- Environment: " + environment +
+                    "\n- Risk Level: " + riskLevel +
+                    "\n- Deployment Window: " + deploymentWindow +
+
+                    "\n\n## Change Description\n\n" +
+                    changeDescription +
+
+                    "\n\n## Business Justification\n\n" +
+                    businessJustification +
+
+                    "\n\n## Testing Details\n\n" +
+                    testingDetails +
+
+                    "\n\n## Impacted Components\n\n" +
+                    impactedComponents +
+
+                    "\n\n## Rollback Plan\n\n" +
+                    rollbackPlan +
+
+                    "\n\n## Implementation Steps\n\n" +
+                    implementationSteps +
+
+                    "\n\n## Post Deployment Validation\n\n" +
+                    validationSteps +
+
+                    "\n\n## Approval Information\n\n" +
+                    "- L1 Approver: " + l1Approver +
+                    "\n- L2 Approver: " + l2Approver +
+                    "\n- L3 Approver: " + l3Approver +
+
+                    "\n\n## Technical Information\n\n" +
+                    "- Repository: " + context.repo.repo +
+                    "\n- Repository Owner: " + context.repo.owner +
+                    "\n- Approved By: @" + commenter +
+                    "\n- Workflow Run: " + process.env.GITHUB_RUN_NUMBER +
+
+                    "\n\n## Audit Information\n\n" +
+                    "- Issue URL: " + issue.data.html_url +
+                    "\n- Status: Released"
                 });
 
               } catch (error) {
@@ -255,7 +330,9 @@ jobs:
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: issueNumber,
-                  labels: ["released"]
+                  labels: [
+                    "released"
+                  ]
                 });
               } catch (error) {}
 
