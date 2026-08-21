@@ -2,7 +2,8 @@ name: Approval Handler
 
 on:
   issue_comment:
-    types: [created]
+    types:
+      - created
 
 permissions:
   issues: write
@@ -12,40 +13,138 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Handle Approval Commands
+      - name: Process Approval Commands
         uses: actions/github-script@v7
         with:
           script: |
-            const comment = context.payload.comment.body;
             const issueNumber = context.issue.number;
+            const comment = context.payload.comment.body.trim();
+            const commenter = context.payload.comment.user.login;
 
-            if (comment === "/approve") {
+            const labelsResponse = await github.rest.issues.listLabelsOnIssue({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber
+            });
 
-              await github.rest.issues.addLabels({
+            const labels = labelsResponse.data.map(label => label.name);
+
+            async function addComment(message) {
+              await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: issueNumber,
-                labels: ["approved"]
+                body: message
               });
+            }
+
+            // L1 Approval
+
+            if (comment === "/approve-l1") {
+
+              if (!labels.includes("pending-l1")) {
+                await addComment("This request is not awaiting L1 approval.");
+                return;
+              }
 
               try {
                 await github.rest.issues.removeLabel({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: issueNumber,
-                  name: "pending-approval"
+                  name: "pending-l1"
                 });
-              } catch (e) {}
+              } catch (error) {}
 
-              await github.rest.issues.createComment({
+              await github.rest.issues.addLabels({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: issueNumber,
-                body: "✅ Request approved."
+                labels: ["approved-l1", "pending-l2"]
               });
+
+              await addComment(
+                "L1 Approved by @" +
+                commenter +
+                "\n\nL2 Approval Required\n\nUse:\n/approve-l2"
+              );
+
+              return;
             }
 
-            if (comment === "/reject") {
+            // L2 Approval
+
+            if (comment === "/approve-l2") {
+
+              if (!labels.includes("pending-l2")) {
+                await addComment("This request is not awaiting L2 approval.");
+                return;
+              }
+
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber,
+                  name: "pending-l2"
+                });
+              } catch (error) {}
+
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                labels: ["approved-l2", "pending-l3"]
+              });
+
+              await addComment(
+                "L2 Approved by @" +
+                commenter +
+                "\n\nL3 Approval Required\n\nUse:\n/approve-l3"
+              );
+
+              return;
+            }
+
+            // L3 Approval
+
+            if (comment === "/approve-l3") {
+
+              if (!labels.includes("pending-l3")) {
+                await addComment("This request is not awaiting L3 approval.");
+                return;
+              }
+
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber,
+                  name: "pending-l3"
+                });
+              } catch (error) {}
+
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                labels: ["approved-l3", "deployment-running"]
+              });
+
+              await addComment(
+                "All approvals completed.\n\nDeployment is now ready."
+              );
+
+              return;
+            }
+
+            // Rejections
+
+            if (
+              comment === "/reject-l1" ||
+              comment === "/reject-l2" ||
+              comment === "/reject-l3"
+            ) {
 
               await github.rest.issues.addLabels({
                 owner: context.repo.owner,
@@ -54,19 +153,7 @@ jobs:
                 labels: ["rejected"]
               });
 
-              try {
-                await github.rest.issues.removeLabel({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: issueNumber,
-                  name: "pending-approval"
-                });
-              } catch (e) {}
-
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: issueNumber,
-                body: "❌ Request rejected."
-              });
+              await addComment(
+                "Request rejected by @" + commenter
+              );
             }
