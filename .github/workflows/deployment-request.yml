@@ -78,11 +78,9 @@ jobs:
             });
 
             const latestCommit = commits.data[0];
-            const compareFrom = extractField("Compare From");
-            const compareTo = extractField("Compare To");
+           
 
-            const diffUrl =
-              `https://github.com/${context.repo.owner}/${context.repo.repo}/compare/${compareFrom}...${compareTo}`;
+            
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
