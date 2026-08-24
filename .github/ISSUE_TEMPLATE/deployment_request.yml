@@ -139,6 +139,17 @@ body:
       placeholder: Smoke tests, API validation, UI validation, monitoring checks, etc.
     validations:
       required: true
+  - type: input
+    id: current-version
+    attributes:
+      label: Current Version
+      placeholder: v1.2.3
+
+  - type: input
+    id: target-version
+    attributes:
+      label: Target Version
+      placeholder: v1.2.4    
 
   - type: checkboxes
     id: confirmations
