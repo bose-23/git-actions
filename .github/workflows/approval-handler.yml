@@ -257,7 +257,10 @@ jobs:
                   "deployment-running"
                 ]
               });
-
+              const compareFrom = extractField("Compare From");
+              const compareTo = extractField("Compare To");
+              const diffUrl =
+                `https://github.com/${context.repo.owner}/${context.repo.repo}/compare/${compareFrom}...${compareTo}`;
               const releaseTag =
                 "deployment-request-" + issueNumber;
 
@@ -371,6 +374,11 @@ jobs:
                    "- Issue URL: " + issue.data.html_url +
                    "\n- Requested By: @" + issue.data.user.login +
                    "\n- Created At: " + issue.data.created_at +
+
+                   "\n\n## Source Control Information\n\n" +
+                   "- Compare From: " + compareFrom +
+                   "\n- Compare To: " + compareTo +
+                   "\n- Git Diff URL: " + diffUrl +
 
                    "\n\n## Deployment Status\n\n" +
                    "Released"
