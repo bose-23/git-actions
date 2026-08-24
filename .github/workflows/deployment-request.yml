@@ -65,6 +65,12 @@ jobs:
 
             const l1Approver = extractApprover("L1 Approver");
 
+            const compareFrom = extractField("Compare From");
+            const compareTo = extractField("Compare To");
+
+            const diffUrl =
+             `https://github.com/${context.repo.owner}/${context.repo.repo}/compare/${compareFrom}...${compareTo}`;
+
             const commits = await github.rest.repos.listCommits({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -72,7 +78,11 @@ jobs:
             });
 
             const latestCommit = commits.data[0];
+            const compareFrom = extractField("Compare From");
+            const compareTo = extractField("Compare To");
 
+            const diffUrl =
+              `https://github.com/${context.repo.owner}/${context.repo.repo}/compare/${compareFrom}...${compareTo}`;
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -93,6 +103,11 @@ jobs:
                 "\nLatest Commit SHA: " + latestCommit.sha +
                 "\nCommit Author: " + latestCommit.commit.author.name +
                 "\nCommit Message: " + latestCommit.commit.message +
+                "\n\nSource Control Information" +
+                "\n--------------------------" +
+                "\nCompare From: " + compareFrom +
+                "\nCompare To: " + compareTo +
+                "\nGit Diff URL: " + diffUrl +  
 
                 "\n\nApproval Status" +
                 "\n---------------" +
@@ -110,4 +125,5 @@ jobs:
                 "\n\nPlease review this deployment request." +
                 "\n\nUse:" +
                 "\n/approve-l1"
+
             });
