@@ -263,6 +263,40 @@ jobs:
 
               try {
 
+               const repoInfo = await github.rest.repos.get({
+                 owner: context.repo.owner,
+                 repo: context.repo.repo
+               });
+
+               const commits = await github.rest.repos.listCommits({
+                 owner: context.repo.owner,
+                 repo: context.repo.repo,
+                 per_page: 5
+               });
+
+               const latestCommit = commits.data[0];
+
+               const recentCommits = commits.data
+                 .map(commit =>
+                   "- " +
+                   commit.sha.substring(0, 7) +
+                   " | " +
+                   commit.commit.author.name +
+                   " | " +
+                   commit.commit.message
+                  )
+                 .join("\n");
+
+               const changedFiles = await github.rest.repos.getCommit({
+                 owner: context.repo.owner,
+                 repo: context.repo.repo,
+                 ref: latestCommit.sha
+                });
+
+               const fileList = changedFiles.data.files
+                 ?.map(file => "- " + file.filename)
+                 .join("\n") || "Not Available";
+
                 await github.rest.repos.createRelease({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
@@ -276,49 +310,70 @@ jobs:
                   body:
                     "# DEPLOYMENT RECORD\n\n" +
 
-                    "## Request Information\n\n" +
+                   "## Request Information\n\n" +
 
-                    "- Issue Number: #" + issueNumber +
-                    "\n- Service Name: " + serviceName +
-                    "\n- Environment: " + environment +
-                    "\n- Risk Level: " + riskLevel +
-                    "\n- Deployment Window: " + deploymentWindow +
+                   "- Issue Number: #" + issueNumber +
+                   "\n- Service Name: " + serviceName +
+                   "\n- Environment: " + environment +
+                   "\n- Risk Level: " + riskLevel +
+                   "\n- Deployment Window: " + deploymentWindow +
 
-                    "\n\n## Change Description\n\n" +
-                    changeDescription +
+                   "\n\n## Change Description\n\n" +
+                   changeDescription +
 
-                    "\n\n## Business Justification\n\n" +
-                    businessJustification +
+                   "\n\n## Business Justification\n\n" +
+                   businessJustification +
 
-                    "\n\n## Testing Details\n\n" +
-                    testingDetails +
+                   "\n\n## Testing Details\n\n" +
+                   testingDetails +
 
-                    "\n\n## Impacted Components\n\n" +
-                    impactedComponents +
+                   "\n\n## Impacted Components\n\n" +
+                   impactedComponents +
 
-                    "\n\n## Rollback Plan\n\n" +
-                    rollbackPlan +
+                   "\n\n## Rollback Plan\n\n" +
+                   rollbackPlan +
 
-                    "\n\n## Implementation Steps\n\n" +
-                    implementationSteps +
+                   "\n\n## Implementation Steps\n\n" +
+                   implementationSteps +
 
-                    "\n\n## Post Deployment Validation\n\n" +
-                    validationSteps +
+                   "\n\n## Post Deployment Validation\n\n" +
+                   validationSteps +
 
-                    "\n\n## Approval Information\n\n" +
-                    "- L1 Approver: " + l1Approver +
-                    "\n- L2 Approver: " + l2Approver +
-                    "\n- L3 Approver: " + l3Approver +
+                   "\n\n## Approval Information\n\n" +
+                   "- L1 Approver: " + l1Approver +
+                   "\n- L2 Approver: " + l2Approver +
+                   "\n- L3 Approver: " + l3Approver +
+                   "\n- Approved By: @" + commenter +
 
-                    "\n\n## Technical Information\n\n" +
-                    "- Repository: " + context.repo.repo +
-                    "\n- Repository Owner: " + context.repo.owner +
-                    "\n- Approved By: @" + commenter +
-                    "\n- Workflow Run: " + process.env.GITHUB_RUN_NUMBER +
+                   "\n\n## Repository Information\n\n" +
+                   "- Repository: " + context.repo.repo +
+                   "\n- Owner: " + context.repo.owner +
+                   "\n- Branch: " + repoInfo.data.default_branch +
+                   "\n- Repository URL: " + repoInfo.data.html_url +
 
-                    "\n\n## Audit Information\n\n" +
-                    "- Issue URL: " + issue.data.html_url +
-                    "\n- Status: Released"
+                   "\n\n## Latest Commit\n\n" +
+                   "- SHA: " + latestCommit.sha +
+                   "\n- Author: " + latestCommit.commit.author.name +
+                   "\n- Date: " + latestCommit.commit.author.date +
+                   "\n- Message: " + latestCommit.commit.message +
+
+                   "\n\n## Files Changed In Latest Commit\n\n" +
+                   fileList +
+
+                   "\n\n## Recent Commit History\n\n" +
+                   recentCommits +
+
+                   "\n\n## Workflow Information\n\n" +
+                   "- Run Number: " + process.env.GITHUB_RUN_NUMBER +
+                   "\n- Actor: " + commenter +
+
+                   "\n\n## Audit Information\n\n" +
+                   "- Issue URL: " + issue.data.html_url +
+                   "\n- Requested By: @" + issue.data.user.login +
+                   "\n- Created At: " + issue.data.created_at +
+
+                   "\n\n## Deployment Status\n\n" +
+                   "Released"
                 });
 
               } catch (error) {
@@ -353,6 +408,131 @@ jobs:
 
               return;
             }
+            // ======================
+            // RESUBMIT
+            // ======================
+
+            if (comment === "/resubmit") {
+
+               if (!labels.includes("rejected")) {
+                await addComment(
+                  "This request is not in Rejected state."
+                );
+               return;
+               }
+
+               await github.rest.issues.addLabels({
+                 owner: context.repo.owner,
+                 repo: context.repo.repo,
+                 issue_number: issueNumber,
+                 labels: ["pending-l1"]
+               });
+
+               try {
+                 await github.rest.issues.removeLabel({
+                   owner: context.repo.owner,
+                   repo: context.repo.repo,
+                   issue_number: issueNumber,
+                   name: "rejected"
+                  });
+                } catch (error) {}
+
+                await addComment(
+                 "Request Resubmitted.\n\nApproval cycle restarted at L1."
+               );
+
+               return;
+              }
+
+            // ======================
+            // START DEPLOYMENT
+            // ======================
+
+            if (comment === "/start-deployment") {
+
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                labels: ["deployment-running"]
+              });
+
+              await addComment(
+                "Deployment started by @" + commenter
+              );
+
+             return;
+             }
+
+            // ======================
+            // DEPLOYMENT FAILED
+            // ======================
+
+            if (comment === "/deployment-failed") {
+
+             await github.rest.issues.addLabels({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               issue_number: issueNumber,
+               labels: ["deployment-failed"]
+             });
+
+             await addComment(
+               "Deployment Failed.\n\nReported By: @" +
+               commenter
+             );
+
+            return;
+            }
+
+            // ======================
+            // ROLLBACK
+            // ======================
+
+            if (comment === "/rollback") {
+
+             await github.rest.issues.addLabels({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               issue_number: issueNumber,
+               labels: ["rolled-back"]
+             });
+
+             await addComment(
+               "Rollback completed by @" +
+               commenter
+             );
+
+             return;
+            }
+
+            // ======================
+            // CLOSE TICKET
+            // ======================
+
+            if (comment === "/close") {
+
+             await github.rest.issues.update({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               issue_number:  issueNumber,
+               state: "closed"
+             });
+
+             await github.rest.issues.addLabels({
+               owner: context.repo.owner,
+               repo: context.repo.repo,
+               issue_number: issueNumber,
+               labels: ["closed"]
+             });
+
+             await addComment(
+               "Ticket closed by @" + commenter
+             );
+
+             return;
+            }
+
 
             // ======================
             // REJECTION FLOW
