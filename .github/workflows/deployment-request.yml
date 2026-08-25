@@ -101,14 +101,7 @@ jobs:
               issue_number: issueNumber,
               body:
                 "DEPLOYMENT REQUEST SUMMARY" +
-                "\n\nRequest Information" +
-                "\n-------------------" +
-                "\nRequest ID: #" + issueNumber +
-                "\nRequested By: @" + context.payload.issue.user.login +
-                "\nRepository: " + context.repo.repo +
-                "\nRepository Owner: " + context.repo.owner +
-
-                "\n\nTechnical Information" +
+                 "\n\nTechnical Information" +
                 "\n---------------------" +
                 "\nBranch: " + context.payload.repository.default_branch +
                 "\nWorkflow Run Number: " + process.env.GITHUB_RUN_NUMBER +
@@ -121,6 +114,15 @@ jobs:
                 "\nCompare To: " + compareTo +
                 "\nGit Diff URL: " + diffUrl +  
 
+                
+                "\n\nRequest Information" +
+                "\n-------------------" +
+                "\nRequest ID: #" + issueNumber +
+                "\nRequested By: @" + context.payload.issue.user.login +
+                "\nRepository: " + context.repo.repo +
+                "\nRepository Owner: " + context.repo.owner +
+
+               
                 "\n\nApproval Status" +
                 "\n---------------" +
                 "\nL1: Pending" +
