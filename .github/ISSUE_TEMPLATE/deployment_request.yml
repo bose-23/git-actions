@@ -207,8 +207,8 @@ body:
     attributes:
       label: Has the change been deployed and tested in STAGE?
       options:
-        - YES
-        - NO
+        - "YES"
+        - "NO"
     validations:
       required: true
 
@@ -236,8 +236,8 @@ body:
     attributes:
       label: Application Configuration Change?
       options:
-        - YES
-        - NO
+        - "YES"
+        - "NO"
 
   - type: textarea
     id: configuration_details
