@@ -49,11 +49,14 @@ jobs:
           script: |
 
             const issueNumber = context.issue.number;
-
             const issueBody = context.payload.issue.body || "";
 
             function extractApprover(fieldName) {
-              const regex = new RegExp(fieldName + "\\s*\\n([^\\n]+)", "i");
+              const regex = new RegExp(
+                fieldName + "\\s*\\n([^\\n]+)",
+                "i"
+              );
+
               const match = issueBody.match(regex);
 
               if (!match) {
@@ -62,10 +65,11 @@ jobs:
 
               return match[1].trim().replace("@", "");
             }
+
             function extractField(fieldName) {
               const regex = new RegExp(
                 fieldName + "\\s*\\n([^\\n]+)",
-               "i"
+                "i"
               );
 
               const match = issueBody.match(regex);
@@ -79,11 +83,50 @@ jobs:
 
             const l1Approver = extractApprover("L1 Approver");
 
+            const applicationName = extractField("Application Name");
+            const serviceName = extractField("Service Name");
+            const changeType = extractField("Change Type");
+            const priority = extractField("Priority");
+            const environment = extractField("Target Environment");
+            const riskLevel = extractField("Risk Level");
+
+            const plannedStart = extractField("Planned Start Time");
+            const plannedEnd = extractField("Planned End Time");
+
+            const productManager = extractField("Product Manager");
+            const businessUser = extractField("Business User");
+
             const compareFrom = extractField("Compare From");
             const compareTo = extractField("Compare To");
 
+            const dependencies = extractField("Dependencies");
+            const dependentModules = extractField("Dependent Modules");
+            const servicesAtRisk = extractField("Services At Risk");
+
+            const testingDetails = extractField("Testing Details");
+
+            const stageTested = extractField(
+              "Has the change been deployed and tested in STAGE?"
+            );
+
+            const qaReport = extractField(
+              "QA Report Link"
+            );
+
+            const configChange = extractField(
+              "Application Configuration Change?"
+            );
+
+            const configurationDetails = extractField(
+              "Configuration Details"
+            );
+
+            const monitoringPlan = extractField(
+              "Post Implementation Monitoring Plan"
+            );
+
             const diffUrl =
-             `https://github.com/${context.repo.owner}/${context.repo.repo}/compare/${compareFrom}...${compareTo}`;
+              `https://github.com/${context.repo.owner}/${context.repo.repo}/compare/${compareFrom}...${compareTo}`;
 
             const commits = await github.rest.repos.listCommits({
               owner: context.repo.owner,
@@ -92,50 +135,72 @@ jobs:
             });
 
             const latestCommit = commits.data[0];
-           
 
-            
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: issueNumber,
+
               body:
-                "DEPLOYMENT REQUEST SUMMARY" +
-                "\n\nRequest Information" +
-                "\n-------------------" +
-                "\nRequest ID: #" + issueNumber +
-                "\nRequested By: @" + context.payload.issue.user.login +
+                "## DEPLOYMENT REQUEST SUMMARY" +
+
+                "\n\n### Change Information" +
+                "\nApplication Name: " + applicationName +
+                "\nService Name: " + serviceName +
+                "\nChange Type: " + changeType +
+                "\nPriority: " + priority +
+                "\nEnvironment: " + environment +
+                "\nRisk Level: " + riskLevel +
+
+                "\n\n### Schedule" +
+                "\nPlanned Start: " + plannedStart +
+                "\nPlanned End: " + plannedEnd +
+
+                "\n\n### Stakeholders" +
+                "\nProduct Manager: " + productManager +
+                "\nBusiness User: " + businessUser +
+
+                "\n\n### Repository Information" +
                 "\nRepository: " + context.repo.repo +
                 "\nRepository Owner: " + context.repo.owner +
-
-                "\n\nTechnical Information" +
-                "\n---------------------" +
                 "\nBranch: " + context.payload.repository.default_branch +
-                "\nWorkflow Run Number: " + process.env.GITHUB_RUN_NUMBER +
                 "\nLatest Commit SHA: " + latestCommit.sha +
                 "\nCommit Author: " + latestCommit.commit.author.name +
                 "\nCommit Message: " + latestCommit.commit.message +
-                "\n\nSource Control Information" +
-                "\n--------------------------" +
+
+                "\n\n### Source Control Information" +
                 "\nCompare From: " + compareFrom +
                 "\nCompare To: " + compareTo +
-                "\nGit Diff URL: " + diffUrl +  
+                "\nGit Diff URL: " + diffUrl +
 
-                "\n\nApproval Status" +
-                "\n---------------" +
+                "\n\n### Impact Assessment" +
+                "\nDependencies: " + dependencies +
+                "\nDependent Modules: " + dependentModules +
+                "\nServices At Risk: " + servicesAtRisk +
+
+                "\n\n### Testing & Validation" +
+                "\nTesting Details: " + testingDetails +
+                "\nStage Tested: " + stageTested +
+                "\nQA Report: " + qaReport +
+
+                "\n\n### Configuration Changes" +
+                "\nConfiguration Change: " + configChange +
+                "\nConfiguration Details: " + configurationDetails +
+
+                "\n\n### Monitoring Plan" +
+                "\n" + monitoringPlan +
+
+                "\n\n### Approval Status" +
                 "\nL1: Pending" +
                 "\nL2: Pending" +
                 "\nL3: Pending" +
 
-                "\n\nCurrent Stage" +
-                "\n--------------" +
+                "\n\n### Current Stage" +
                 "\nPending L1 Approval" +
 
-                "\n\nAction Required" +
-                "\n---------------" +
+                "\n\n### Action Required" +
                 "\n@" + l1Approver +
                 "\n\nPlease review this deployment request." +
                 "\n\nUse:" +
                 "\n/approve-l1"
-
             });
