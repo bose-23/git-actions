@@ -62,6 +62,20 @@ jobs:
 
               return match[1].trim().replace("@", "");
             }
+            function extractField(fieldName) {
+              const regex = new RegExp(
+                fieldName + "\\s*\\n([^\\n]+)",
+               "i"
+              );
+
+              const match = issueBody.match(regex);
+
+              if (!match) {
+                return "Not Provided";
+              }
+
+              return match[1].trim();
+            }
 
             const l1Approver = extractApprover("L1 Approver");
 
