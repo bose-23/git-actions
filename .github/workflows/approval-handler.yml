@@ -69,7 +69,6 @@ jobs:
             const serviceName = extractField("Service Name");
             const environment = extractField("Target Environment");
             const riskLevel = extractField("Risk Level");
-            const deploymentWindow = extractField("Deployment Window");
             const changeDescription = extractField("Change Description");
             const businessJustification = extractField("Business Justification");
             const testingDetails = extractField("Testing Details");
@@ -78,6 +77,37 @@ jobs:
             const implementationSteps = extractField("Implementation Steps");
             const validationSteps = extractField("Post Deployment Validation");
 
+            const applicationName = extractField("Application Name");
+            const changeType = extractField("Change Type");
+            const priority = extractField("Priority");
+
+            const plannedStart = extractField("Planned Start Time");
+            const plannedEnd = extractField("Planned End Time");
+
+            const productManager = extractField("Product Manager");
+            const businessUser = extractField("Business User");
+
+            const dependencies = extractField("Dependencies");
+            const dependentModules = extractField("Dependent Modules");
+            const servicesAtRisk = extractField("Services At Risk");
+
+            const stageTested = extractField(
+              "Has the change been deployed and tested in STAGE?"
+            );
+
+            const qaReport = extractField("QA Report Link");
+
+            const configChange = extractField(
+              "Application Configuration Change?"
+            );
+
+            const configurationDetails = extractField(
+              "Configuration Details"
+            );
+
+            const monitoringPlan = extractField(
+              "Post Implementation Monitoring Plan"
+            );
             const labelsResponse = await github.rest.issues.listLabelsOnIssue({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -313,13 +343,17 @@ jobs:
                   body:
                     "# DEPLOYMENT RECORD\n\n" +
 
-                   "## Request Information\n\n" +
+                   "## Change Information\n\n" +
 
                    "- Issue Number: #" + issueNumber +
+                   "\n- Application Name: " + applicationName +
                    "\n- Service Name: " + serviceName +
+                   "\n- Change Type: " + changeType +
+                   "\n- Priority: " + priority +
                    "\n- Environment: " + environment +
                    "\n- Risk Level: " + riskLevel +
-                   "\n- Deployment Window: " + deploymentWindow +
+                   "\n- Planned Start: " + plannedStart +
+                   "\n- Planned End: " + plannedEnd +
 
                    "\n\n## Change Description\n\n" +
                    changeDescription +
@@ -327,17 +361,35 @@ jobs:
                    "\n\n## Business Justification\n\n" +
                    businessJustification +
 
+                   "\n\n## Stakeholders\n\n" +
+                   "- Product Manager: " + productManager +
+                   "\n- Business User: " + businessUser +
+
                    "\n\n## Testing Details\n\n" +
                    testingDetails +
 
-                   "\n\n## Impacted Components\n\n" +
-                   impactedComponents +
+                   "\n\n## Testing & Validation\n\n" +
+                   "- Stage Tested: " + stageTested +
+                   "\n- QA Report: " + qaReport +
+
+                   "\n\n## Impact Assessment\n\n" +
+                   "- Dependencies: " + dependencies +
+                   "\n- Dependent Modules: " + dependentModules +
+                   "\n- Services At Risk: " + servicesAtRisk +
 
                    "\n\n## Rollback Plan\n\n" +
                    rollbackPlan +
 
+                   "\n\n## Configuration Changes\n\n" +
+                   "- Application Configuration Change: " + configChange +
+                   "\n\nConfiguration Details:\n" +
+                   configurationDetails +
+
                    "\n\n## Implementation Steps\n\n" +
                    implementationSteps +
+
+                   "\n\n## Monitoring Plan\n\n" +
+                   monitoringPlan +
 
                    "\n\n## Post Deployment Validation\n\n" +
                    validationSteps +
