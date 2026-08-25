@@ -5,12 +5,50 @@ labels:
   - new-request
 
 body:
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Change Information
+
+  - type: input
+    id: application_name
+    attributes:
+      label: Application Name
+      placeholder: KYC Service
+    validations:
+      required: true
+
   - type: input
     id: service_name
     attributes:
       label: Service Name
       description: Name of the application/service to be deployed
       placeholder: document-consumer-service
+    validations:
+      required: true
+
+  - type: dropdown
+    id: change_type
+    attributes:
+      label: Change Type
+      options:
+        - Enhancement
+        - Bug Fix
+        - Configuration Change
+        - Emergency Change
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - Low
+        - Medium
+        - High
+        - Critical
     validations:
       required: true
 
@@ -37,20 +75,215 @@ body:
     validations:
       required: true
 
-  - type: input
-    id: deployment_window
+  - type: textarea
+    id: change_description
     attributes:
-      label: Deployment Window
-      description: Planned deployment date and time
-      placeholder: "21-Aug-2026 10:00 PM IST"
+      label: Change Description
+      description: What is being changed?
     validations:
       required: true
+
+  - type: textarea
+    id: business_justification
+    attributes:
+      label: Business Justification
+      description: Why is this change required?
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Schedule
+
+  - type: input
+    id: planned_start
+    attributes:
+      label: Planned Start Time
+      placeholder: 21-Aug-2026 10:00 PM IST
+    validations:
+      required: true
+
+  - type: input
+    id: planned_end
+    attributes:
+      label: Planned End Time
+      placeholder: 21-Aug-2026 11:00 PM IST
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Stakeholders
+
+  - type: input
+    id: product_manager
+    attributes:
+      label: Product Manager
+      placeholder: GitHub Username
+
+  - type: input
+    id: business_user
+    attributes:
+      label: Business User
+      placeholder: GitHub Username
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Source Control Information
+
+  - type: input
+    id: compare-from
+    attributes:
+      label: Compare From
+      description: Release tag, branch, or commit to compare from
+      placeholder: v1.2.3
+    validations:
+      required: true
+
+  - type: input
+    id: compare-to
+    attributes:
+      label: Compare To
+      description: Release tag, branch, or commit to compare to
+      placeholder: v1.2.4
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Impact Assessment
+
+  - type: textarea
+    id: impacted_components
+    attributes:
+      label: Impacted Components
+      description: Applications, services, APIs or modules affected
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: Services/components this deployment depends on
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependent_modules
+    attributes:
+      label: Dependent Modules
+      description: Systems impacted by this deployment
+    validations:
+      required: true
+
+  - type: textarea
+    id: services_at_risk
+    attributes:
+      label: Services At Risk
+      description: Production services that could be affected
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Testing & Validation
+
+  - type: textarea
+    id: testing_details
+    attributes:
+      label: Testing Details
+      description: Mention testing performed before deployment
+    validations:
+      required: true
+
+  - type: dropdown
+    id: stage_tested
+    attributes:
+      label: Has the change been deployed and tested in STAGE?
+      options:
+        - YES
+        - NO
+    validations:
+      required: true
+
+  - type: input
+    id: qa_report
+    attributes:
+      label: QA Report Link
+      placeholder: Test report URL
+
+  - type: textarea
+    id: validation_steps
+    attributes:
+      label: Post Deployment Validation
+      description: Validation activities after deployment
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Configuration Changes
+
+  - type: dropdown
+    id: config_change
+    attributes:
+      label: Application Configuration Change?
+      options:
+        - YES
+        - NO
+
+  - type: textarea
+    id: configuration_details
+    attributes:
+      label: Configuration Details
+      description: ENV variables, AWS Parameter Store, Secrets, etc.
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Deployment Execution
+
+  - type: textarea
+    id: implementation_steps
+    attributes:
+      label: Implementation Steps
+      description: Deployment / Launch Plan
+    validations:
+      required: true
+
+  - type: textarea
+    id: monitoring_plan
+    attributes:
+      label: Post Implementation Monitoring Plan
+      description: What should be monitored after deployment?
+    validations:
+      required: true
+
+  - type: textarea
+    id: rollback_plan
+    attributes:
+      label: Rollback Plan
+      description: Recovery plan if deployment fails
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ## Approval Chain
 
   - type: input
     id: l1_approver
     attributes:
       label: L1 Approver
-      description: Team Lead / Initial Approval
+      description: Team Lead Approval
       placeholder: GitHub Username
     validations:
       required: true
@@ -68,94 +301,10 @@ body:
     id: l3_approver
     attributes:
       label: L3 Approver
-      description: Release Manager / Final Approval
+      description: Release Manager Approval
       placeholder: GitHub Username
     validations:
       required: true
-
-  - type: textarea
-    id: change_description
-    attributes:
-      label: Change Description
-      description: What is being changed?
-      placeholder: Describe the deployment/change being introduced.
-    validations:
-      required: true
-
-  - type: textarea
-    id: business_justification
-    attributes:
-      label: Business Justification
-      description: Why is this change required?
-      placeholder: Explain the reason and expected business benefit.
-    validations:
-      required: true
-
-  - type: textarea
-    id: testing_details
-    attributes:
-      label: Testing Details
-      description: Mention testing performed before deployment
-      placeholder: Unit testing, integration testing, UAT validation, etc.
-    validations:
-      required: true
-
-  - type: textarea
-    id: impacted_components
-    attributes:
-      label: Impacted Components
-      description: Applications, services, APIs or modules affected by this deployment
-      placeholder: List impacted systems.
-    validations:
-      required: true
-
-  - type: textarea
-    id: rollback_plan
-    attributes:
-      label: Rollback Plan
-      description: How will the deployment be reverted if issues occur?
-      placeholder: Roll back to previous stable release.
-    validations:
-      required: true
-
-  - type: textarea
-    id: implementation_steps
-    attributes:
-      label: Implementation Steps
-      description: High-level deployment procedure
-      placeholder: |
-        1. Take backup
-        2. Deploy artifact
-        3. Verify application health
-        4. Perform smoke testing
-    validations:
-      required: true
-
-  - type: textarea
-    id: validation_steps
-    attributes:
-      label: Post Deployment Validation
-      description: How will the deployment be validated after release?
-      placeholder: Smoke tests, API validation, UI validation, monitoring checks, etc.
-    validations:
-      required: true
-  - type: input
-    id: compare-from
-    attributes:
-      label: Compare From
-      description: Release tag, branch, or commit to compare from
-      placeholder: v1.2.3
-    validations:
-      required: true
-
-  - type: input
-    id: compare-to
-    attributes:
-      label: Compare To
-      description: Release tag, branch, or commit to compare to
-      placeholder: v1.2.4
-    validations:
-      required: true 
 
   - type: checkboxes
     id: confirmations
@@ -170,5 +319,5 @@ body:
           required: true
         - label: Change documentation is available
           required: true
-        - label: Deployment window has been approved
+        - label: Deployment has been reviewed and approved
           required: true
