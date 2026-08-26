@@ -24,9 +24,9 @@ body:
     attributes:
       label: Change Category
       options:
-        - Standard
-        - Normal
-        - Emergency
+        - "Standard"
+        - "Normal"
+        - "Emergency"
     validations:
       required: true
 
@@ -35,10 +35,10 @@ body:
     attributes:
       label: Change Type
       options:
-        - Enhancement
-        - Bug Fix
-        - Configuration Change
-        - Emergency Change
+        - "Enhancement"
+        - "Bug Fix"
+        - "Configuration Change"
+        - "Emergency Change"
     validations:
       required: true
 
@@ -47,10 +47,10 @@ body:
     attributes:
       label: Priority
       options:
-        - Low
-        - Medium
-        - High
-        - Critical
+        - "Low"
+        - "Medium"
+        - "High"
+        - "Critical"
     validations:
       required: true
 
@@ -59,10 +59,10 @@ body:
     attributes:
       label: Target Environment
       options:
-        - DEV
-        - UAT
-        - PREPROD
-        - PROD
+        - "DEV"
+        - "UAT"
+        - "PREPROD"
+        - "PROD"
     validations:
       required: true
 
@@ -71,9 +71,9 @@ body:
     attributes:
       label: Risk Level
       options:
-        - Low
-        - Medium
-        - High
+        - "Low"
+        - "Medium"
+        - "High"
     validations:
       required: true
 
@@ -217,8 +217,8 @@ body:
     attributes:
       label: QA - Test Report?
       options:
-        - Yes
-        - Not Required
+        - "Yes"
+        - "Not Required"
     validations:
       required: true
 
@@ -233,9 +233,9 @@ body:
     attributes:
       label: Has EM checked the code diff? Is it part of release notes?
       options:
-        - Yes
-        - No
-        - NA
+        - "Yes"
+        - "No"
+        - "NA"
     validations:
       required: true
 
@@ -244,9 +244,9 @@ body:
     attributes:
       label: Has QA team reviewed design documentation and integrations?
       options:
-        - Yes
-        - No
-        - NA
+        - "Yes"
+        - "No"
+        - "NA"
     validations:
       required: true
 
@@ -255,9 +255,9 @@ body:
     attributes:
       label: Has EM reviewed the test report?
       options:
-        - Yes
-        - No
-        - NA
+        - "Yes"
+        - "No"
+        - "NA"
     validations:
       required: true
 
@@ -266,9 +266,9 @@ body:
     attributes:
       label: Has QA tested all integrations?
       options:
-        - Yes
-        - No
-        - NA
+        - "Yes"
+        - "No"
+        - "NA"
     validations:
       required: true
 
@@ -290,8 +290,8 @@ body:
     attributes:
       label: Controlled Launch Plan
       options:
-        - Yes
-        - No
+        - "Yes"
+        - "No"
     validations:
       required: true
 
@@ -312,8 +312,8 @@ body:
     attributes:
       label: AWS Config Changes
       options:
-        - Yes
-        - No
+        - "Yes"
+        - "No"
     validations:
       required: true
 
