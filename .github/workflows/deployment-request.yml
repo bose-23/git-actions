@@ -81,10 +81,18 @@ jobs:
               return match[1].trim();
             }
 
-            const l1Approver = extractApprover("L1 Approver");
+            const level1Approver = extractApprover("Level-1 UX Design QA");
+            const level2Approver = extractApprover("Level-2 Architecture");
+            const level3Approver = extractApprover("Level-3 Infosec Lead");
+            const level4Approver = extractApprover("Level-4 Manager");
+            const level5Approver = extractApprover("Level-5 QA");
+            const level6Approver = extractApprover("Level-6 DoE");
 
             const applicationName = extractField("Application Name");
-            const serviceName = extractField("Service Name");
+            
+            const changeCategory = extractField("Change Category");
+            const components = extractField("Components");
+            const labelsValue = extractField("Labels");
             const changeType = extractField("Change Type");
             const priority = extractField("Priority");
             const environment = extractField("Target Environment");
@@ -105,17 +113,13 @@ jobs:
 
             const testingDetails = extractField("Testing Details");
 
-            const stageTested = extractField(
-              "Has the change been deployed and tested in STAGE?"
-            );
+            
 
             const qaReport = extractField(
               "QA Report Link"
             );
 
-            const configChange = extractField(
-              "Application Configuration Change?"
-            );
+            
 
             const configurationDetails = extractField(
               "Configuration Details"
@@ -135,18 +139,65 @@ jobs:
             });
 
             const latestCommit = commits.data[0];
+            const qaRequired = extractField("QA - Test Report?");
+            const emCheckedCodeDiff = extractField(
+              "Has EM checked the code diff? Is it part of release notes?"
+            );
+
+            const qaReviewedDesign = extractField(
+              "Has QA team reviewed design documentation and integrations?"
+            );
+
+            const emReviewedTestReport = extractField(
+              "Has EM reviewed the test report?"
+            );
+
+            const qaTestedIntegrations = extractField(
+              "Has QA tested all integrations?"
+            );
+
+            const controlledLaunch = extractField(
+              "Controlled Launch Plan"
+            );
+
+            const launchPlanDetails = extractField(
+              "Launch Plan Details"
+            );
+
+            const awsConfigChanges = extractField(
+              "AWS Config Changes"
+            );
+
+            const configVersion = extractField(
+              "Config Version"
+            );
+
+            const configurationDetails = extractField(
+              "Configuration Details"
+            );
+
+            const implementationPlan = extractField(
+              "Implementation Plan"
+            );
+
+            const rollbackPlan = extractField(
+              "Rollback Plan"
+            );
 
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: issueNumber,
 
+
               body:
                 "## DEPLOYMENT REQUEST SUMMARY" +
 
                 "\n\n### Change Information" +
                 "\nApplication Name: " + applicationName +
-                "\nService Name: " + serviceName +
+                "\nChange Category: " + changeCategory +
+                "\nComponents: " + components +
+                "\nLabels: " + labelsValue +
                 "\nChange Type: " + changeType +
                 "\nPriority: " + priority +
                 "\nEnvironment: " + environment +
@@ -157,8 +208,8 @@ jobs:
                 "\nPlanned End: " + plannedEnd +
 
                 "\n\n### Stakeholders" +
-                "\nProduct Manager: " + productManager +
-                "\nBusiness User: " + businessUser +
+                const productManager = extractField("Notification to Product Manager");
+                const businessUser = extractField("Notification to Business User");
 
                 "\n\n### Repository Information" +
                 "\nRepository: " + context.repo.repo +
@@ -178,28 +229,45 @@ jobs:
                 "\nDependent Modules: " + dependentModules +
                 "\nServices At Risk: " + servicesAtRisk +
 
-                "\n\n### Testing & Validation" +
-                "\nTesting Details: " + testingDetails +
-                "\nStage Tested: " + stageTested +
+                "\n\n### Testing & QA Validation" +
+                "\nQA Test Report Required: " + qaRequired +
                 "\nQA Report: " + qaReport +
+                "\nTesting Details: " + testingDetails +
+                "\nEM Checked Code Diff: " + emCheckedCodeDiff +
+                "\nQA Reviewed Design: " + qaReviewedDesign +
+                "\nEM Reviewed Test Report: " + emReviewedTestReport +
+                "\nQA Tested Integrations: " + qaTestedIntegrations +
+
+                "\n\n### Controlled Launch" +
+                "\nControlled Launch Plan: " + controlledLaunch +
+                "\nLaunch Plan Details: " + launchPlanDetails +
 
                 "\n\n### Configuration Changes" +
-                "\nConfiguration Change: " + configChange +
+                "\nAWS Config Changes: " + awsConfigChanges +
+                "\nConfig Version: " + configVersion +
                 "\nConfiguration Details: " + configurationDetails +
+
+                "\n\n### Implementation Plan" +
+                "\n" + implementationPlan +
+
+                "\n\n### Rollback Plan" +
+                "\n" + rollbackPlan +
 
                 "\n\n### Monitoring Plan" +
                 "\n" + monitoringPlan +
 
-                "\n\n### Approval Status" +
-                "\nL1: Pending" +
-                "\nL2: Pending" +
-                "\nL3: Pending" +
+                "\nLevel-1 UX Design QA: Pending" +
+                "\nLevel-2 Architecture: Pending" +
+                "\nLevel-3 Infosec Lead: Pending" +
+                "\nLevel-4 Manager: Pending" +
+                "\nLevel-5 QA: Pending" +
+                "\nLevel-6 DoE: Pending" +
 
                 "\n\n### Current Stage" +
                 "\nPending L1 Approval" +
 
                 "\n\n### Action Required" +
-                "\n@" + l1Approver +
+                "\n@" + level1Approver +
                 "\n\nPlease review this deployment request." +
                 "\n\nUse:" +
                 "\n/approve-l1"
