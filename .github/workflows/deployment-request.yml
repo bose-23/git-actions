@@ -264,11 +264,11 @@ jobs:
                 "\nLevel-6 DoE: Pending" +
 
                 "\n\n### Current Stage" +
-                "\nPending L1 Approval" +
+                "\nPending Level1 Approval" +
 
                 "\n\n### Action Required" +
                 "\n@" + level1Approver +
                 "\n\nPlease review this deployment request." +
                 "\n\nUse:" +
-                "\n/approve-l1"
+                "\n/approve-level1"
             });
