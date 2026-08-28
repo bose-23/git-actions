@@ -67,7 +67,7 @@ jobs:
             const level3Approver = extractApprover("Level-3 Infosec Lead");
             const level4Approver = extractApprover("Level-4 Manager");
             const level5Approver = extractApprover("Level-5 QA");
-            const level6Approver = extractApprover("Level-6 DoE");
+            const level6Approver = extractApprover("Level-6 DoE (Director of Engineering)");
 
 
             const environment = extractField("Target Environment");
