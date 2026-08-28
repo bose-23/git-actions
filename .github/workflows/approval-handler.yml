@@ -62,11 +62,14 @@ jobs:
               return match[1].trim();
             }
 
-            const l1Approver = extractApprover("L1 Approver");
-            const l2Approver = extractApprover("L2 Approver");
-            const l3Approver = extractApprover("L3 Approver");
+            const level1Approver = extractApprover("Level-1 UX Design QA");
+            const level2Approver = extractApprover("Level-2 Architecture");
+            const level3Approver = extractApprover("Level-3 Infosec Lead");
+            const level4Approver = extractApprover("Level-4 Manager");
+            const level5Approver = extractApprover("Level-5 QA");
+            const level6Approver = extractApprover("Level-6 DoE");
 
-            const serviceName = extractField("Service Name");
+
             const environment = extractField("Target Environment");
             const riskLevel = extractField("Risk Level");
             const changeDescription = extractField("Change Description");
@@ -74,8 +77,53 @@ jobs:
             const testingDetails = extractField("Testing Details");
             const impactedComponents = extractField("Impacted Components");
             const rollbackPlan = extractField("Rollback Plan");
-            const implementationSteps = extractField("Implementation Steps");
-            const validationSteps = extractField("Post Deployment Validation");
+            
+
+            const changeCategory = extractField("Change Category");
+
+            const components = extractField("Components");
+
+            const labelsValue = extractField("Labels");
+
+            const controlledLaunch = extractField(
+              "Controlled Launch Plan"
+            );
+
+            const launchPlanDetails = extractField(
+              "Launch Plan Details"
+            );
+
+            const awsConfigChanges = extractField(
+              "AWS Config Changes"
+            );
+
+            const configVersion = extractField(
+              "Config Version"
+            );
+
+            const implementationPlan = extractField(
+              "Implementation Plan"
+            );
+
+            const qaRequired = extractField(
+              "QA - Test Report?"
+            );
+
+            const emCheckedCodeDiff = extractField(
+              "Has EM checked the code diff? Is it part of release notes?"
+            );
+
+            const qaReviewedDesign = extractField(
+              "Has QA team reviewed design documentation and integrations?"
+            );
+
+            const emReviewedTestReport = extractField(
+              "Has EM reviewed the test report?"
+            );
+
+            const qaTestedIntegrations = extractField(
+              "Has QA tested all integrations?"
+            );
 
             const applicationName = extractField("Application Name");
             const changeType = extractField("Change Type");
@@ -84,22 +132,23 @@ jobs:
             const plannedStart = extractField("Planned Start Time");
             const plannedEnd = extractField("Planned End Time");
 
-            const productManager = extractField("Product Manager");
-            const businessUser = extractField("Business User");
+            const productManager = extractField(
+              "Notification to Product Manager"
+            );
+
+            const businessUser = extractField(
+              "Notification to Business User"
+            );
 
             const dependencies = extractField("Dependencies");
             const dependentModules = extractField("Dependent Modules");
             const servicesAtRisk = extractField("Services At Risk");
 
-            const stageTested = extractField(
-              "Has the change been deployed and tested in STAGE?"
-            );
+
 
             const qaReport = extractField("QA Report Link");
 
-            const configChange = extractField(
-              "Application Configuration Change?"
-            );
+
 
             const configurationDetails = extractField(
               "Configuration Details"
@@ -131,20 +180,20 @@ jobs:
             // L1 APPROVAL
             // ======================
 
-            if (comment === "/approve-l1") {
+            if (comment === "/approve-level1") {
 
-              if (commenter !== l1Approver) {
+              if (commenter !== level1Approver) {
                 await addComment(
                   "Unauthorized.\n\nOnly @" +
-                  l1Approver +
-                  " can approve L1."
+                  level1Approver +
+                  " can approve Level-1."
                 );
                 return;
               }
 
-              if (!labels.includes("pending-l1")) {
+              if (!labels.includes("pending-level1")) {
                 await addComment(
-                  "This request is not awaiting L1 approval."
+                  "This request is not awaiting Level-1 approval."
                 );
                 return;
               }
@@ -154,7 +203,7 @@ jobs:
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: issueNumber,
-                  name: "pending-l1"
+                  name: "pending-level1"
                 });
               } catch (error) {}
 
@@ -163,25 +212,26 @@ jobs:
                 repo: context.repo.repo,
                 issue_number: issueNumber,
                 labels: [
-                  "approved-l1",
-                  "pending-l2"
+                  "approved-level1",
+                  "pending-level2"
                 ]
               });
 
               await addComment(
-                "L1 Approved by @" + commenter +
-                "\n\nApproval Status" +
+                "Level-1 UX Design QA Approved by @" + commenter +
+
+                "\nApproval Status" +
                 "\n----------------" +
-                "\nL1: Approved" +
-                "\nL2: Pending" +
-                "\nL3: Pending" +
-                "\n\nCurrent Stage" +
-                "\n--------------" +
-                "\nPending L2 Approval" +
-                "\n\nAction Required" +
-                "\n---------------" +
-                "\n@" + l2Approver +
-                "\n\nUse:\n/approve-l2"
+                "\nLevel-1 UX Design QA: Approved" +
+                "\nLevel-2 Architecture: Pending" +
+                "\nLevel-3 Infosec Lead: Pending" +
+                "\nLevel-4 Manager: Pending" +
+                "\nLevel-5 QA: Pending" +
+                "\nLevel-6 DoE: Pending" +
+
+                "\n@" + level2Approver +
+
+                "\n/approve-level2"
               );
 
               return;
@@ -191,20 +241,20 @@ jobs:
             // L2 APPROVAL
             // ======================
 
-            if (comment === "/approve-l2") {
+            if (comment === "/approve-level2") {
 
-              if (commenter !== l2Approver) {
+              if (commenter !== level2Approver) {
                 await addComment(
                   "Unauthorized.\n\nOnly @" +
-                  l2Approver +
-                  " can approve L2."
+                  level2Approver +
+                  " can approve Level2."
                 );
                 return;
               }
 
-              if (!labels.includes("pending-l2")) {
+              if (!labels.includes("pending-level2")) {
                 await addComment(
-                  "This request is not awaiting L2 approval."
+                  "This request is not awaiting Level2 approval."
                 );
                 return;
               }
@@ -214,7 +264,7 @@ jobs:
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: issueNumber,
-                  name: "pending-l2"
+                  name: "pending-level2"
                 });
               } catch (error) {}
 
@@ -223,48 +273,232 @@ jobs:
                 repo: context.repo.repo,
                 issue_number: issueNumber,
                 labels: [
-                  "approved-l2",
-                  "pending-l3"
+                  "approved-level2",
+                  "pending-level3"
                 ]
               });
 
               await addComment(
-                "L2 Approved by @" + commenter +
-                "\n\nApproval Status" +
+                "Level-2 Architecture Approved by @" + commenter +
+
+                "\nApproval Status" +
                 "\n----------------" +
-                "\nL1: Approved" +
-                "\nL2: Approved" +
-                "\nL3: Pending" +
-                "\n\nCurrent Stage" +
-                "\n--------------" +
-                "\nPending L3 Approval" +
-                "\n\nAction Required" +
-                "\n---------------" +
-                "\n@" + l3Approver +
-                "\n\nUse:\n/approve-l3"
+                "\nLevel-1 UX Design QA: Approved" +
+                "\nLevel-2 Architecture: Approved" +
+                "\nLevel-3 Infosec Lead: Pending" +
+                "\nLevel-4 Manager: Pending" +
+                "\nLevel-5 QA: Pending" +
+                "\nLevel-6 DoE: Pending" +
+
+                "\n@" + level3Approver +
+
+                "\n/approve-level3"
+              );
+
+              return;
+            }
+
+              // ======================
+            // L3 APPROVAL
+            // ======================
+
+            if (comment === "/approve-level3") {
+
+              if (commenter !== level3Approver) {
+                await addComment(
+                  "Unauthorized.\n\nOnly @" +
+                  level3Approver +
+                  " can approve Level3."
+                );
+                return;
+              }
+
+              if (!labels.includes("pending-level3")) {
+                await addComment(
+                  "This request is not awaiting Level3 approval."
+                );
+                return;
+              }
+
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber,
+                  name: "pending-level3"
+                });
+              } catch (error) {}
+
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                labels: [
+                  "approved-level3",
+                  "pending-level4"
+                ]
+              });
+
+              await addComment(
+                "Level-3 Infosec Lead Approved by @" + commenter +
+
+                "\nApproval Status" +
+                "\n----------------" +
+                "\nLevel-1 UX Design QA: Approved" +
+                "\nLevel-2 Architecture: Approved" +
+                "\nLevel-3 Infosec Lead: Approved" +
+                "\nLevel-4 Manager: Pending" +
+                "\nLevel-5 QA: Pending" +
+                "\nLevel-6 DoE: Pending" +
+
+                "\n@" + level4Approver +
+
+                "\n/approve-level4"
+              );
+
+              return;
+            }
+
+              // ======================
+            // L4 APPROVAL
+            // ======================
+
+            if (comment === "/approve-level4") {
+
+              if (commenter !== level4Approver) {
+                await addComment(
+                  "Unauthorized.\n\nOnly @" +
+                  level4Approver +
+                  " can approve Level4."
+                );
+                return;
+              }
+
+              if (!labels.includes("pending-level4")) {
+                await addComment(
+                  "This request is not awaiting Level4 approval."
+                );
+                return;
+              }
+
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber,
+                  name: "pending-level4"
+                });
+              } catch (error) {}
+
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                labels: [
+                  "approved-level4",
+                  "pending-level5"
+                ]
+              });
+
+              await addComment(
+                "Level-4 Manager Approved by @" + commenter +
+
+                "\nApproval Status" +
+                "\n----------------" +
+                "\nLevel-1 UX Design QA: Approved" +
+                "\nLevel-2 Architecture: Approved" +
+                "\nLevel-3 Infosec Lead: Approved" +
+                "\nLevel-4 Manager: Approved" +
+                "\nLevel-5 QA: Pending" +
+                "\nLevel-6 DoE: Pending" +
+
+                "\n@" + level5Approver +
+
+                "\n/approve-level5"
+              );
+
+              return;
+            }
+
+              // ======================
+            // L5 APPROVAL
+            // ======================
+
+            if (comment === "/approve-level5") {
+
+              if (commenter !== level5Approver) {
+                await addComment(
+                  "Unauthorized.\n\nOnly @" +
+                  level5Approver +
+                  " can approve Level5."
+                );
+                return;
+              }
+
+              if (!labels.includes("pending-level5")) {
+                await addComment(
+                  "This request is not awaiting Level5 approval."
+                );
+                return;
+              }
+
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber,
+                  name: "pending-level5"
+                });
+              } catch (error) {}
+
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                labels: [
+                  "approved-level5",
+                  "pending-level6"
+                ]
+              });
+
+              await addComment(
+                "Level-5 QA Approved by @" + commenter +
+
+                "\nApproval Status" +
+                "\n----------------" +
+                "\nLevel-1 UX Design QA: Approved" +
+                "\nLevel-2 Architecture: Approved" +
+                "\nLevel-3 Infosec Lead: Approved" +
+                "\nLevel-4 Manager: Approved" +
+                "\nLevel-5 QA: Approved" +
+                "\nLevel-6 DoE: Pending" +
+
+                "\n@" + level6Approver +
+
+                "\n/approve-level6"
               );
 
               return;
             }
 
             // ======================
-            // L3 APPROVAL
+            // L6 APPROVAL
             // ======================
 
-            if (comment === "/approve-l3") {
+            if (comment === "/approve-level6") {
 
-              if (commenter !== l3Approver) {
+              if (commenter !== level6Approver) {
                 await addComment(
                   "Unauthorized.\n\nOnly @" +
-                  l3Approver +
-                  " can approve L3."
+                  level6Approver +
+                  " can approve Level6."
                 );
                 return;
               }
 
-              if (!labels.includes("pending-l3")) {
+              if (!labels.includes("pending-level6")) {
                 await addComment(
-                  "This request is not awaiting L3 approval."
+                  "This request is not awaiting Level6 approval."
                 );
                 return;
               }
@@ -274,7 +508,7 @@ jobs:
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: issueNumber,
-                  name: "pending-l3"
+                  name: "pending-level6"
                 });
               } catch (error) {}
 
@@ -283,7 +517,7 @@ jobs:
                 repo: context.repo.repo,
                 issue_number: issueNumber,
                 labels: [
-                  "approved-l3",
+                  "approved-level6",
                   "deployment-running"
                 ]
               });
@@ -347,7 +581,9 @@ jobs:
 
                    "- Issue Number: #" + issueNumber +
                    "\n- Application Name: " + applicationName +
-                   "\n- Service Name: " + serviceName +
+                   "\n- Change Category: " + changeCategory +
+                   "\n- Components: " + components +
+                   "\n- Labels: " + labelsValue +
                    "\n- Change Type: " + changeType +
                    "\n- Priority: " + priority +
                    "\n- Environment: " + environment +
@@ -368,9 +604,18 @@ jobs:
                    "\n\n## Testing Details\n\n" +
                    testingDetails +
 
-                   "\n\n## Testing & Validation\n\n" +
-                   "- Stage Tested: " + stageTested +
+                   "\n\n## Testing & QA Validation\n\n" +
+                   "- QA Test Report Required: " + qaRequired +
                    "\n- QA Report: " + qaReport +
+                   "\n- EM Checked Code Diff: " + emCheckedCodeDiff +
+                   "\n- QA Reviewed Design: " + qaReviewedDesign +
+                   "\n- EM Reviewed Test Report: " + emReviewedTestReport +
+                   "\n- QA Tested Integrations: " + qaTestedIntegrations +
+
+                   "\n\n## Controlled Launch Plan\n\n" +
+                   "- Controlled Launch: " + controlledLaunch +
+                   "\n\nLaunch Plan Details:\n" +
+                   launchPlanDetails +
 
                    "\n\n## Impact Assessment\n\n" +
                    "- Dependencies: " + dependencies +
@@ -381,24 +626,35 @@ jobs:
                    rollbackPlan +
 
                    "\n\n## Configuration Changes\n\n" +
-                   "- Application Configuration Change: " + configChange +
+                   "- AWS Config Changes: " + awsConfigChanges +
+                   "\n- Config Version: " + configVersion +
+
                    "\n\nConfiguration Details:\n" +
                    configurationDetails +
 
-                   "\n\n## Implementation Steps\n\n" +
-                   implementationSteps +
+                   "\n\n## Implementation Plan\n\n" +
+                   implementationPlan +
 
                    "\n\n## Monitoring Plan\n\n" +
                    monitoringPlan +
 
-                   "\n\n## Post Deployment Validation\n\n" +
-                   validationSteps +
+                   
 
                    "\n\n## Approval Information\n\n" +
-                   "- L1 Approver: " + l1Approver +
-                   "\n- L2 Approver: " + l2Approver +
-                   "\n- L3 Approver: " + l3Approver +
-                   "\n- Approved By: @" + commenter +
+                   "- Level-1 UX Design QA: " + level1Approver +
+                   "\n- Level-2 Architecture: " + level2Approver +
+                   "\n- Level-3 Infosec Lead: " + level3Approver +
+                   "\n- Level-4 Manager: " + level4Approver +
+                   "\n- Level-5 QA: " + level5Approver +
+                   "\n- Level-6 DoE: " + level6Approver +
+                   
+                   "\n\n## Approval Chain\n\n" +
+                   "- Level-1 UX Design QA: Approved" +
+                   "\n- Level-2 Architecture: Approved" +
+                   "\n- Level-3 Infosec Lead: Approved" +
+                   "\n- Level-4 Manager: Approved" +
+                   "\n- Level-5 QA: Approved" +
+                   "\n- Level-6 DoE: Approved" +
 
                    "\n\n## Repository Information\n\n" +
                    "- Repository: " + context.repo.repo +
@@ -452,12 +708,15 @@ jobs:
               } catch (error) {}
 
               await addComment(
-                "L3 Approved by @" + commenter +
+                "Level-6 DoE Approved by @" + commenter +
                 "\n\nApproval Status" +
                 "\n----------------" +
-                "\nL1: Approved" +
-                "\nL2: Approved" +
-                "\nL3: Approved" +
+                "\nLevel-1: Approved" +
+                "\nLevel-2: Approved" +
+                "\nLevel-3: Approved" +
+                "\nLevel-4: Approved" +
+                "\nLevel-5: Approved" +
+                "\nLevel-6: Approved" +
                 "\n\nCurrent Stage" +
                 "\n--------------" +
                 "\nReleased" +
@@ -485,7 +744,7 @@ jobs:
                  owner: context.repo.owner,
                  repo: context.repo.repo,
                  issue_number: issueNumber,
-                 labels: ["pending-l1"]
+                 labels: ["pending-level1"]
                });
 
                try {
@@ -498,7 +757,7 @@ jobs:
                 } catch (error) {}
 
                 await addComment(
-                 "Request Resubmitted.\n\nApproval cycle restarted at L1."
+                 "Request Resubmitted.\n\nApproval cycle restarted at Level1."
                );
 
                return;
@@ -599,9 +858,12 @@ jobs:
             // ======================
 
             if (
-              comment === "/reject-l1" ||
-              comment === "/reject-l2" ||
-              comment === "/reject-l3"
+              comment === "/reject-level1" ||
+              comment === "/reject-level2" ||
+              comment === "/reject-level3" ||
+              comment === "/reject-level4" ||
+              comment === "/reject-level5" ||
+              comment === "/reject-level6"
             ) {
 
               await github.rest.issues.addLabels({
