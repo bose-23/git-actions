@@ -405,7 +405,7 @@ body:
   - type: input
     id: level6_doe
     attributes:
-      label: Level-6 DoE (Director of Engineering)
+      label: Level-6 DoE
       placeholder: GitHub Username
     validations:
       required: true
