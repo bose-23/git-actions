@@ -271,5 +271,5 @@ jobs:
                 "\n@" + level1Approver +
                 "\n\nPlease review this deployment request." +
                 "\n\nUse:" +
-                "\n/approve-l1"
+                "\n/approve-level1"
             });
