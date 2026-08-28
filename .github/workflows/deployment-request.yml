@@ -23,7 +23,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: issueNumber,
-              labels: ["pending-level1"]
+              labels: ["pending-l1"]
             });
 
       - name: Remove New Request Label
@@ -101,8 +101,13 @@ jobs:
             const plannedStart = extractField("Planned Start Time");
             const plannedEnd = extractField("Planned End Time");
 
-            const productManager = extractField("Product Manager");
-            const businessUser = extractField("Business User");
+            const productManager = extractField(
+              "Notification to Product Manager"
+            );
+
+            const businessUser = extractField(
+              "Notification to Business User"
+            );
 
             const compareFrom = extractField("Compare From");
             const compareTo = extractField("Compare To");
@@ -120,10 +125,6 @@ jobs:
             );
 
             
-
-            const configurationDetails = extractField(
-              "Configuration Details"
-            );
 
             const monitoringPlan = extractField(
               "Post Implementation Monitoring Plan"
@@ -208,8 +209,8 @@ jobs:
                 "\nPlanned End: " + plannedEnd +
 
                 "\n\n### Stakeholders" +
-                const productManager = extractField("Notification to Product Manager");
-                const businessUser = extractField("Notification to Business User");
+                "\nProduct Manager: " + productManager +
+                "\nBusiness User: " + businessUser +
 
                 "\n\n### Repository Information" +
                 "\nRepository: " + context.repo.repo +
@@ -264,11 +265,11 @@ jobs:
                 "\nLevel-6 DoE: Pending" +
 
                 "\n\n### Current Stage" +
-                "\nPending Level1 Approval" +
+                "\nPending L1 Approval" +
 
                 "\n\n### Action Required" +
                 "\n@" + level1Approver +
                 "\n\nPlease review this deployment request." +
                 "\n\nUse:" +
-                "\n/approve-level1"
+                "\n/approve-l1"
             });
