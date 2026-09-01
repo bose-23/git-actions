@@ -167,6 +167,40 @@ jobs:
               label => label.name
             );
 
+            const cmstpTeam = extractField(const cmstpExecutionOwner = extractField(
+              "CMSTP Execution Owner"
+            );
+
+            const requestType = extractField("Request Type");
+
+            const branchesImpacted = extractField(
+              "Number of Branches Impacted"
+            );
+
+            const efPartnersImpacted = extractField(
+              "Number of EF Partners Impacted"
+            );
+
+            const techProductsImpacted = extractField(
+              "Number of Tech Products Impacted"
+            );
+
+            const canaryDeploymentDetails = extractField(
+              "Canary Deployment Details (The canary should be started with 1% traffic weight, 1 branch, partner)"
+            );
+
+            const loanProductsImpacted = extractField(
+              "Number of Loan Products Impacted"
+            );
+
+            const canaryDeployment = extractField(
+              "Canary Deployment"
+            );
+
+            const nginxGateway = extractField(
+              "Nginx API Gateway Deployment Required?"
+            );
+
             async function addComment(message) {
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
@@ -632,6 +666,8 @@ jobs:
 
                    "\n\n## Deployment Controls\n\n" +
                    "- Canary Deployment: " + canaryDeployment +
+                   "\n\nCanary Deployment Details:\n" +
+                   canaryDeploymentDetails +
                    "\n- Nginx Gateway Required: " + nginxGateway +
 
                    "\n\n## Rollback Plan\n\n" +
