@@ -185,6 +185,38 @@ jobs:
               "Rollback Plan"
             );
 
+            const cmstpTeam = extractField("CMSTP for Team");
+
+            const cmstpExecutionOwner = extractField(
+              "CMSTP Execution Owner"
+            );
+
+            const requestType = extractField("Request Type");
+
+            const branchesImpacted = extractField(
+              "Number of Branches Impacted"
+            );
+
+            const efPartnersImpacted = extractField(
+              "Number of EF Partners Impacted"
+            );
+
+            const techProductsImpacted = extractField(
+              "Number of Tech Products Impacted"
+            );
+
+            const loanProductsImpacted = extractField(
+              "Number of Loan Products Impacted"
+            );
+
+            const canaryDeployment = extractField(
+              "Canary Deployment"
+            );
+
+            const nginxGateway = extractField(
+              "Nginx API Gateway Deployment Required?"
+            );
+
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -203,6 +235,9 @@ jobs:
                 "\nPriority: " + priority +
                 "\nEnvironment: " + environment +
                 "\nRisk Level: " + riskLevel +
+                "\nCMSTP Team: " + cmstpTeam +
+                "\nCMSTP Execution Owner: " + cmstpExecutionOwner +
+                "\nRequest Type: " + requestType +
 
                 "\n\n### Schedule" +
                 "\nPlanned Start: " + plannedStart +
@@ -229,6 +264,10 @@ jobs:
                 "\nDependencies: " + dependencies +
                 "\nDependent Modules: " + dependentModules +
                 "\nServices At Risk: " + servicesAtRisk +
+                "\nBranches Impacted: " + branchesImpacted +
+                "\nEF Partners Impacted: " + efPartnersImpacted +
+                "\nTech Products Impacted: " + techProductsImpacted +
+                "\nLoan Products Impacted: " + loanProductsImpacted +
 
                 "\n\n### Testing & QA Validation" +
                 "\nQA Test Report Required: " + qaRequired +
@@ -239,12 +278,16 @@ jobs:
                 "\nEM Reviewed Test Report: " + emReviewedTestReport +
                 "\nQA Tested Integrations: " + qaTestedIntegrations +
 
+                "\n\n### Deployment Controls" +
+                "\nCanary Deployment: " + canaryDeployment +
+                "\nNginx Gateway Deployment Required: " + nginxGateway +
+
                 "\n\n### Controlled Launch" +
                 "\nControlled Launch Plan: " + controlledLaunch +
                 "\nLaunch Plan Details: " + launchPlanDetails +
 
                 "\n\n### Configuration Changes" +
-                "\nAWS Config Changes: " + awsConfigChanges +
+                "\nApplication Configurations: " + awsConfigChanges +
                 "\nConfig Version: " + configVersion +
                 "\nConfiguration Details: " + configurationDetails +
 
