@@ -217,6 +217,10 @@ jobs:
               "Nginx API Gateway Deployment Required?"
             );
 
+            const canaryDeploymentDetails = extractField(
+              "Canary Deployment Details (The canary should be started with 1% traffic weight, 1 branch, partner)"
+            );
+
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -280,7 +284,10 @@ jobs:
 
                 "\n\n### Deployment Controls" +
                 "\nCanary Deployment: " + canaryDeployment +
+                "\nCanary Deployment Details: " +
+                canaryDeploymentDetails +
                 "\nNginx Gateway Deployment Required: " + nginxGateway +
+                
 
                 "\n\n### Controlled Launch" +
                 "\nControlled Launch Plan: " + controlledLaunch +
