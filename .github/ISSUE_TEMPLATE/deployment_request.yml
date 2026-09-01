@@ -341,6 +341,26 @@ body:
         - "No"
     validations:
       required: true
+  
+  - type: textarea
+    id: canary_deployment_details
+    attributes:
+      label: Canary Deployment Details
+      description: Provide service name and rollout progression.
+      placeholder: |
+        Mandate Presentment Service - 1% -> 5% -> 20% -> 50% -> 100%
+
+        OR
+
+        Collections Service - 1% -> 10% -> 25% -> 50% -> 100%
+
+        Include:
+        - Service Name
+        - Traffic Rollout Plan
+        - Branch/Partner Scope
+        - Monitoring Criteria
+    validations:
+      required: false
 
   - type: dropdown
     id: nginx_gateway_required
