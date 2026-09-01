@@ -30,6 +30,29 @@ body:
     validations:
       required: true
 
+  - type: input
+    id: cmstp_team
+    attributes:
+      label: CMSTP for Team
+      placeholder: Internal Engineering
+    validations:
+      required: true
+
+  - type: input
+    id: cmstp_execution_owner
+    attributes:
+      label: CMSTP Execution Owner
+      placeholder: PRF DevOps
+    validations:
+      required: true
+
+  - type: input
+    id: request_type
+    attributes:
+      label: Request Type
+      placeholder: Deployment / Hotfix / Rollback
+    
+
   - type: dropdown
     id: change_type
     attributes:
@@ -174,6 +197,30 @@ body:
     attributes:
       value: |
         ## Impact Assessment
+  
+  - type: input
+    id: branches_impacted
+    attributes:
+      label: Number of Branches Impacted
+      placeholder: All
+
+  - type: input
+    id: ef_partners_impacted
+    attributes:
+      label: Number of EF Partners Impacted
+      placeholder: All
+
+  - type: input
+    id: tech_products_impacted
+    attributes:
+      label: Number of Tech Products Impacted
+      placeholder: Zero
+
+  - type: input
+    id: loan_products_impacted
+    attributes:
+      label: Number of Loan Products Impacted
+      placeholder: All
 
   - type: textarea
     id: impacted_components
@@ -284,7 +331,27 @@ body:
     attributes:
       value: |
         ## Controlled Launch Plan
+  
+  - type: dropdown
+    id: canary_deployment
+    attributes:
+      label: Canary Deployment
+      options:
+        - "Yes"
+        - "No"
+    validations:
+      required: true
 
+  - type: dropdown
+    id: nginx_gateway_required
+    attributes:
+      label: Nginx API Gateway Deployment Required?
+      options:
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+  
   - type: dropdown
     id: controlled_launch
     attributes:
@@ -310,7 +377,7 @@ body:
   - type: dropdown
     id: aws_config_change
     attributes:
-      label: AWS Config Changes
+      label: Application Configurations (Node ENV, AWS Parameter Store)
       options:
         - "Yes"
         - "No"
