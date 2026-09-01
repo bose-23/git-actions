@@ -590,6 +590,10 @@ jobs:
                    "\n- Risk Level: " + riskLevel +
                    "\n- Planned Start: " + plannedStart +
                    "\n- Planned End: " + plannedEnd +
+                   "\n- CMSTP Team: " + cmstpTeam +
+                   "\n- CMSTP Execution Owner: " + cmstpExecutionOwner +
+                   "\n- Request Type: " + requestType +
+
 
                    "\n\n## Change Description\n\n" +
                    changeDescription +
@@ -621,6 +625,14 @@ jobs:
                    "- Dependencies: " + dependencies +
                    "\n- Dependent Modules: " + dependentModules +
                    "\n- Services At Risk: " + servicesAtRisk +
+                   "\n- Branches Impacted: " + branchesImpacted +
+                   "\n- EF Partners Impacted: " + efPartnersImpacted +
+                   "\n- Tech Products Impacted: " + techProductsImpacted +
+                   "\n- Loan Products Impacted: " + loanProductsImpacted +
+
+                   "\n\n## Deployment Controls\n\n" +
+                   "- Canary Deployment: " + canaryDeployment +
+                   "\n- Nginx Gateway Required: " + nginxGateway +
 
                    "\n\n## Rollback Plan\n\n" +
                    rollbackPlan +
