@@ -95,8 +95,7 @@ jobs:
             const labelsValue = extractField("Labels");
             const changeType = extractField("Change Type");
             const priority = extractField("Priority");
-            const environment = extractField("Target Environment");
-            const riskLevel = extractField("Risk Level");
+          
 
             const plannedStart = extractField("Planned Start Time");
             const plannedEnd = extractField("Planned End Time");
@@ -112,16 +111,36 @@ jobs:
             const compareFrom = extractField("Compare From");
             const compareTo = extractField("Compare To");
 
-            const dependencies = extractField("Dependencies");
-            const dependentModules = extractField("Dependent Modules");
-            const servicesAtRisk = extractField("Services At Risk");
+            const dependencies = extractField(
+              "List of dependencies for this change to successfully work on production"
+            );
 
-            const testingDetails = extractField("Testing Details");
+            const dependentModules = extractField(
+              "List of modules (services, functionalities, clients) on production that are dependent on the components being changed"
+            );
 
-            
+            const collectionBackup = extractField(
+              "Is collection backup required, for the script execution"
+            );
+
+            const servicesAtRisk = extractField(
+              "List of things working on production that are at risk of breaking because of this change"
+            );
 
             const qaReport = extractField(
-              "QA Report Link"
+              "QA Test Report"
+            );
+
+            const testingDetails = extractField(
+              "Areas identified for testing and Regression"
+            );
+
+            const testingExceptions = extractField(
+              "Are we bypassing any failure from testing?"
+            );
+
+            const stageValidated = extractField(
+              "Has the change been deployed and tested in STAGE environment"
             );
 
             
@@ -141,20 +160,21 @@ jobs:
 
             const latestCommit = commits.data[0];
             const qaRequired = extractField("QA - Test Report?");
+           
             const emCheckedCodeDiff = extractField(
-              "Has EM checked the code diff? Is it part of release notes?"
+              "Has EM checked the code diff? is it part of Release note?"
             );
 
             const qaReviewedDesign = extractField(
-              "Has QA team reviewed design documentation and integrations?"
+              "Has QA team seen the design document and understood all the associated integrations?"
             );
 
             const emReviewedTestReport = extractField(
-              "Has EM reviewed the test report?"
+              "Has EM seen/reviewed the test report?"
             );
 
             const qaTestedIntegrations = extractField(
-              "Has QA tested all integrations?"
+              "Has QA tested all integrations? Answer NA wherever not applicable"
             );
 
             const controlledLaunch = extractField(
@@ -173,8 +193,16 @@ jobs:
               "Config Version"
             );
 
+            const applicationConfigurations = extractField(
+              "Application Configurations(Node EWS, AWS Paramstore)"
+            );
+
             const configurationDetails = extractField(
-              "Configuration Details"
+              "Application Configurations Details"
+            );
+
+            const apigeeReference = extractField(
+              "Apigee reference to onboard URL"
             );
 
             const implementationPlan = extractField(
@@ -191,22 +219,20 @@ jobs:
               "CMSTP Execution Owner"
             );
 
-            const requestType = extractField("Request Type");
-
             const branchesImpacted = extractField(
-              "Number of Branches Impacted"
+              "No of Branches Impacted"
             );
 
             const efPartnersImpacted = extractField(
-              "Number of EF Partners Impacted"
+              "No of EF Partners Impacted"
             );
 
             const techProductsImpacted = extractField(
-              "Number of Tech Products Impacted"
+              "No of Tech Products Impacted"
             );
 
             const loanProductsImpacted = extractField(
-              "Number of Loan Products Impacted"
+              "No of Loan Products Impacted"
             );
 
             const canaryDeployment = extractField(
@@ -214,11 +240,19 @@ jobs:
             );
 
             const nginxGateway = extractField(
-              "Nginx API Gateway Deployment Required?"
+              "Nginx API Gateway deployment required for Internal microservice?"
+            );
+
+            const nginxCallerService = extractField(
+              'Specify the Caller App/Service name(s) if Nginx deployment is selected "Yes"'
             );
 
             const canaryDeploymentDetails = extractField(
               "Canary Deployment Details (The canary should be started with 1% traffic weight, 1 branch, partner)"
+            );
+
+            const testReportBreakingChanges = extractField(
+              "Test Report for breaking changes ( discuss with the dependent EM, in case of any query)?"
             );
 
             await github.rest.issues.createComment({
@@ -237,11 +271,9 @@ jobs:
                 "\nLabels: " + labelsValue +
                 "\nChange Type: " + changeType +
                 "\nPriority: " + priority +
-                "\nEnvironment: " + environment +
-                "\nRisk Level: " + riskLevel +
                 "\nCMSTP Team: " + cmstpTeam +
                 "\nCMSTP Execution Owner: " + cmstpExecutionOwner +
-                "\nRequest Type: " + requestType +
+                
 
                 "\n\n### Schedule" +
                 "\nPlanned Start: " + plannedStart +
@@ -272,6 +304,7 @@ jobs:
                 "\nEF Partners Impacted: " + efPartnersImpacted +
                 "\nTech Products Impacted: " + techProductsImpacted +
                 "\nLoan Products Impacted: " + loanProductsImpacted +
+                "\nCollection Backup Required: " + collectionBackup +
 
                 "\n\n### Testing & QA Validation" +
                 "\nQA Test Report Required: " + qaRequired +
@@ -281,12 +314,19 @@ jobs:
                 "\nQA Reviewed Design: " + qaReviewedDesign +
                 "\nEM Reviewed Test Report: " + emReviewedTestReport +
                 "\nQA Tested Integrations: " + qaTestedIntegrations +
+                "\nTesting Exceptions: " + testingExceptions +
+                "\nStage Validated: " + stageValidated +
 
                 "\n\n### Deployment Controls" +
                 "\nCanary Deployment: " + canaryDeployment +
                 "\nCanary Deployment Details: " +
                 canaryDeploymentDetails +
                 "\nNginx Gateway Deployment Required: " + nginxGateway +
+                "\nTest Report for Breaking Changes: " +
+                testReportBreakingChanges +
+
+                "\nCaller Service: " +
+                nginxCallerService +
                 
 
                 "\n\n### Controlled Launch" +
@@ -294,9 +334,14 @@ jobs:
                 "\nLaunch Plan Details: " + launchPlanDetails +
 
                 "\n\n### Configuration Changes" +
-                "\nApplication Configurations: " + awsConfigChanges +
+                "\nAWS Config Changes: " + awsConfigChanges +
                 "\nConfig Version: " + configVersion +
                 "\nConfiguration Details: " + configurationDetails +
+                "\nApplication Configurations: " +
+                applicationConfigurations +
+
+                "\nApigee Reference URL: " +
+                apigeeReference +
 
                 "\n\n### Implementation Plan" +
                 "\n" + implementationPlan +
