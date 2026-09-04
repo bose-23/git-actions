@@ -70,12 +70,23 @@ jobs:
             const level6Approver = extractApprover("Level-6 DoE");
 
 
-            const environment = extractField("Target Environment");
-            const riskLevel = extractField("Risk Level");
+          
             const changeDescription = extractField("Change Description");
-            const businessJustification = extractField("Business Justification");
-            const testingDetails = extractField("Testing Details");
-            const impactedComponents = extractField("Impacted Components");
+                        
+            const testingDetails = extractField(
+              "Areas identified for testing and Regression"
+            );
+
+          
+
+            const testingExceptions = extractField(
+              "Are we bypassing any failure from testing?"
+            );
+
+            const stageValidated = extractField(
+              "Has the change been deployed and tested in STAGE environment"
+            );
+          
             const rollbackPlan = extractField("Rollback Plan");
             
 
@@ -110,19 +121,19 @@ jobs:
             );
 
             const emCheckedCodeDiff = extractField(
-              "Has EM checked the code diff? Is it part of release notes?"
+              "Has EM checked the code diff? is it part of Release note?"
             );
 
             const qaReviewedDesign = extractField(
-              "Has QA team reviewed design documentation and integrations?"
+              "Has QA team seen the design document and understood all the associated integrations?"
             );
 
             const emReviewedTestReport = extractField(
-              "Has EM reviewed the test report?"
+              "Has EM seen/reviewed the test report?"
             );
 
             const qaTestedIntegrations = extractField(
-              "Has QA tested all integrations?"
+              "Has QA tested all integrations? Answer NA wherever not applicable"
             );
 
             const applicationName = extractField("Application Name");
@@ -140,18 +151,42 @@ jobs:
               "Notification to Business User"
             );
 
-            const dependencies = extractField("Dependencies");
-            const dependentModules = extractField("Dependent Modules");
-            const servicesAtRisk = extractField("Services At Risk");
+            const dependencies = extractField(
+              "List of dependencies for this change to successfully work on production"
+            );
+
+            const dependentModules = extractField(
+              "List of modules (services, functionalities, clients) on production that are dependent on the components being changed"
+            );
+
+            const collectionBackup = extractField(
+              "Is collection backup required, for the script execution"
+            );
+
+            const servicesAtRisk = extractField(
+              "List of things working on production that are at risk of breaking because of this change"
+            );
 
 
 
-            const qaReport = extractField("QA Report Link");
+            const qaReport = extractField("QA Test Report");
 
 
+
+            const applicationConfigurations = extractField(
+              "Application Configurations(Node EWS, AWS Paramstore)"
+            );
 
             const configurationDetails = extractField(
-              "Configuration Details"
+              "Application Configurations Details"
+            );
+
+            const apigeeReference = extractField(
+              "Apigee reference to onboard URL"
+            );
+
+            const testReportBreakingChanges = extractField(
+              "Test Report for breaking changes ( discuss with the dependent EM, in case of any query)?"
             );
 
             const monitoringPlan = extractField(
@@ -167,22 +202,26 @@ jobs:
               label => label.name
             );
 
-            const cmstpTeam = extractField(const cmstpExecutionOwner = extractField(
+            const cmstpTeam = extractField(
+              "CMSTP for Team"
+            );
+
+            const cmstpExecutionOwner = extractField(
               "CMSTP Execution Owner"
             );
 
-            const requestType = extractField("Request Type");
+            
 
             const branchesImpacted = extractField(
-              "Number of Branches Impacted"
+              "No of Branches Impacted"
             );
 
             const efPartnersImpacted = extractField(
-              "Number of EF Partners Impacted"
+              "No of EF Partners Impacted"
             );
 
             const techProductsImpacted = extractField(
-              "Number of Tech Products Impacted"
+              "No of Tech Products Impacted"
             );
 
             const canaryDeploymentDetails = extractField(
@@ -190,7 +229,7 @@ jobs:
             );
 
             const loanProductsImpacted = extractField(
-              "Number of Loan Products Impacted"
+              "No of Loan Products Impacted"
             );
 
             const canaryDeployment = extractField(
@@ -198,7 +237,11 @@ jobs:
             );
 
             const nginxGateway = extractField(
-              "Nginx API Gateway Deployment Required?"
+              "Nginx API Gateway deployment required for Internal microservice?"
+            );
+
+            const nginxCallerService = extractField(
+              'Specify the Caller App/Service name(s) if Nginx deployment is selected "Yes"'
             );
 
             async function addComment(message) {
@@ -620,20 +663,17 @@ jobs:
                    "\n- Labels: " + labelsValue +
                    "\n- Change Type: " + changeType +
                    "\n- Priority: " + priority +
-                   "\n- Environment: " + environment +
-                   "\n- Risk Level: " + riskLevel +
                    "\n- Planned Start: " + plannedStart +
                    "\n- Planned End: " + plannedEnd +
                    "\n- CMSTP Team: " + cmstpTeam +
                    "\n- CMSTP Execution Owner: " + cmstpExecutionOwner +
-                   "\n- Request Type: " + requestType +
+                   
 
 
                    "\n\n## Change Description\n\n" +
                    changeDescription +
 
-                   "\n\n## Business Justification\n\n" +
-                   businessJustification +
+
 
                    "\n\n## Stakeholders\n\n" +
                    "- Product Manager: " + productManager +
@@ -645,6 +685,9 @@ jobs:
                    "\n\n## Testing & QA Validation\n\n" +
                    "- QA Test Report Required: " + qaRequired +
                    "\n- QA Report: " + qaReport +
+                   "\n- Testing Details: " + testingDetails +
+                   "\n- Testing Exceptions: " + testingExceptions +
+                   "\n- Stage Validated: " + stageValidated +
                    "\n- EM Checked Code Diff: " + emCheckedCodeDiff +
                    "\n- QA Reviewed Design: " + qaReviewedDesign +
                    "\n- EM Reviewed Test Report: " + emReviewedTestReport +
@@ -658,6 +701,7 @@ jobs:
                    "\n\n## Impact Assessment\n\n" +
                    "- Dependencies: " + dependencies +
                    "\n- Dependent Modules: " + dependentModules +
+                   "\n- Collection Backup Required: " + collectionBackup +
                    "\n- Services At Risk: " + servicesAtRisk +
                    "\n- Branches Impacted: " + branchesImpacted +
                    "\n- EF Partners Impacted: " + efPartnersImpacted +
@@ -668,7 +712,12 @@ jobs:
                    "- Canary Deployment: " + canaryDeployment +
                    "\n\nCanary Deployment Details:\n" +
                    canaryDeploymentDetails +
-                   "\n- Nginx Gateway Required: " + nginxGateway +
+                   "\n- Test Report For Breaking Changes: " +
+                   testReportBreakingChanges +
+                   "\n- Nginx Gateway Required: " +
+                   nginxGateway +
+                   "\n- Caller Service: " +
+                   nginxCallerService +
 
                    "\n\n## Rollback Plan\n\n" +
                    rollbackPlan +
@@ -676,6 +725,10 @@ jobs:
                    "\n\n## Configuration Changes\n\n" +
                    "- AWS Config Changes: " + awsConfigChanges +
                    "\n- Config Version: " + configVersion +
+                   "\n- Application Configurations: " +
+                   applicationConfigurations +
+                   "\n- Apigee Reference URL: " +
+                   apigeeReference +
 
                    "\n\nConfiguration Details:\n" +
                    configurationDetails +
