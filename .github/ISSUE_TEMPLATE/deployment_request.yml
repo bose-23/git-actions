@@ -5,7 +5,6 @@ labels:
   - new-request
 
 body:
-
   - type: markdown
     attributes:
       value: |
@@ -15,7 +14,69 @@ body:
     id: application_name
     attributes:
       label: Application Name
-      placeholder: KYC Service
+      options: 
+       - "Pennant"
+       - "SFDC"
+       - "LCS"
+       - "Jayam LMS"
+       - "Sales Central"
+       - "Credit Central"
+       - "OPS Central"
+       - "Inbound Payment Service"
+       - "Policy Engine"
+       - "LMS-Loan Management System(API)"
+       - "Disbursement Service"
+       - "Repayment Service"
+       - "CrisMac"
+       - "SnowFlake"
+       - "CAT: Compliance Automation Tool"
+       - "Securitization"
+       - "Partner Central"
+       - "KYC Service"
+       - "Miles LMS"
+       - "Data Central"
+       - "DMS"
+       - "Trackwizz AML"
+       - "Algo-Fushion"
+       - "DTM"
+       - "JupyterHub"
+       - "Document Management Service(Kanaja)"
+       - "Event based Loading(Lambda)"
+       - "AWS Sagemaker"
+       - "Glue"
+       - "Talend"
+       - "IMS"
+       - "Finance Central"
+       - "TechOps"
+       - "RPA"
+       - "RBAC System"
+       - "NACH Platform"
+       - "Mudra Stack(Embedded Finance)"
+       - "LVS- Legal Verification System"
+       - "Customer Account Services"
+       - "D2C Shakthi"
+       - "RCAL"
+       - "PowerBI"
+       - "Disprz"
+       - "Darwinbox"
+       - "HR Tech"
+       - "Nginx"
+       - "Cogno.ai(Whatsapp bots)"
+       - "Qualtrics(Surveys)"
+       - "M2P"
+       - "SAMPARK"
+       - "Cost per file"
+       - "HSA"
+       - "Sharepoint"
+       - "CLM"
+       - "Fraud Central"
+       - "Possidex"
+       - "COC"
+       - "DevOps"
+       - "Fraud Investigation"
+       - "Microsure- MFI"
+       - "Oracle Fusion"
+       - "SAP TRM"
     validations:
       required: true
 
@@ -25,8 +86,9 @@ body:
       label: Change Category
       options:
         - "Standard"
-        - "Normal"
         - "Emergency"
+        - "Minor"
+        - "Major"
     validations:
       required: true
 
@@ -34,7 +96,16 @@ body:
     id: cmstp_team
     attributes:
       label: CMSTP for Team
-      placeholder: Internal Engineering
+      options: 
+        - "Internal Engineering"
+        - "Business Solution Group(BSG)"
+        - "APIGEE"
+        - "Securitization"
+        - "Network"
+        - "DPE"
+        - "Partner Function- Finance"
+        - "Partner Function- Treasury"
+        - "Partner Function- Other Functions"
     validations:
       required: true
 
@@ -42,16 +113,19 @@ body:
     id: cmstp_execution_owner
     attributes:
       label: CMSTP Execution Owner
-      placeholder: PRF DevOps
+      options:
+        - "PRF DevOps"
+        - "Business Solution Group(BSG)"
+        - "APIGEE"
+        - "Securitization"
+        - "Network"
+        - "DPE"
+        - "Partner Function- Finance"
+        - "Partner Function- Treasury"
+        - "Partner Function- Other Functions"
     validations:
       required: true
 
-  - type: input
-    id: request_type
-    attributes:
-      label: Request Type
-      placeholder: Deployment / Hotfix / Rollback
-    
 
   - type: dropdown
     id: change_type
@@ -59,9 +133,21 @@ body:
       label: Change Type
       options:
         - "Enhancement"
-        - "Bug Fix"
-        - "Configuration Change"
-        - "Emergency Change"
+        - "New Feature"
+        - "Infra Change"
+        - "DevOps Tool Upgrade"
+        - "Production Bug Fix"
+        - "Mongo DB Script"
+        - "Postgres Script"
+        - "AWS Paramstore Updates"
+        - "Cron Execution"
+        - "Tech Debt"
+        - "Config"
+        - "External/Partner/3P/2P Service Onboarding on Nginx"
+        - "FCS flags"
+        - "Mongo DB changes for feature Rollout"
+        - "Postgres changes for feature Rollout"
+        - "Policy updates in Policy Engine service"
     validations:
       required: true
 
@@ -71,48 +157,17 @@ body:
       label: Priority
       options:
         - "Low"
-        - "Medium"
         - "High"
         - "Critical"
     validations:
       required: true
 
-  - type: dropdown
-    id: environment
-    attributes:
-      label: Target Environment
-      options:
-        - "DEV"
-        - "UAT"
-        - "PREPROD"
-        - "PROD"
-    validations:
-      required: true
-
-  - type: dropdown
-    id: risk_level
-    attributes:
-      label: Risk Level
-      options:
-        - "Low"
-        - "Medium"
-        - "High"
-    validations:
-      required: true
 
   - type: textarea
     id: change_description
     attributes:
       label: Change Description
-      description: Describe the proposed change
-    validations:
-      required: true
-
-  - type: textarea
-    id: business_justification
-    attributes:
-      label: Business Justification
-      description: Why is this change required?
+      description: Add a Description(Required)
     validations:
       required: true
 
@@ -120,13 +175,34 @@ body:
     id: components
     attributes:
       label: Components
-      placeholder: KYC, Payments, Notification
+      options:
+       - "techdebt"
 
   - type: input
     id: labels_value
     attributes:
       label: Labels
-      placeholder: deployment, release, production
+      options:
+        - "Policy Engine"
+        - "None"
+        - "PL_DOCUMENT_PAGE"
+        - "Validations"
+        - "advanceemi"
+        - "PD-777"
+        - "MODULE_ADMIN_FCU"
+        - "application:fraud-service"
+        - "CCUBL2024Sprint5Removal"
+        - "coc-oe"
+        - "plat-release-FY26-Q2-Sprint5-Week2"
+        - "PL_CAM_PAGE"
+        - "LADS-NI"
+        - "uri:/v1/check/applicant"
+        - "CC_QA"
+        - "SPRUTI_TESTCASE_NOTEXECUTED_BY_DEV"
+        - "CrxUBLQ12024"
+        - "name:APPLICANT_SEARCH_CIRCUIT_BREAKER"
+        - "TShirtSize_M"
+        - "SX_Insurance_Bug"
 
   - type: markdown
     attributes:
@@ -197,60 +273,73 @@ body:
     attributes:
       value: |
         ## Impact Assessment
-  
+
   - type: input
     id: branches_impacted
     attributes:
-      label: Number of Branches Impacted
-      placeholder: All
+      label: No of Branches Impacted
+      options: 
+        - "Zero"
+        - "One"
+        - "More than One"
+        - "All"
 
   - type: input
     id: ef_partners_impacted
     attributes:
-      label: Number of EF Partners Impacted
-      placeholder: All
+      label: No of EF Partners Impacted
+      options: 
+        - "Zero"
+        - "One"
+        - "More than One"
+        - "All"
 
   - type: input
     id: tech_products_impacted
     attributes:
-      label: Number of Tech Products Impacted
-      placeholder: Zero
+      label: No of Tech Products Impacted
+      options: 
+        - "Zero"
+        - "One"
+        - "More than One"
+        - "All"
 
   - type: input
     id: loan_products_impacted
     attributes:
-      label: Number of Loan Products Impacted
-      placeholder: All
-
-  - type: textarea
-    id: impacted_components
-    attributes:
-      label: Impacted Components
-      description: Applications, APIs, Services or Modules affected
-    validations:
-      required: true
+      label: No of Loan Products Impacted
+      options: 
+        - "Zero"
+        - "One"
+        - "More than One"
+        - "All"
 
   - type: textarea
     id: dependencies
     attributes:
-      label: Dependencies
-      description: Dependencies required for deployment
+      label: List of dependencies for this change to successfully work on production
     validations:
       required: true
 
   - type: textarea
     id: dependent_modules
     attributes:
-      label: Dependent Modules
-      description: Downstream systems impacted
+      label: List of modules (services, functionalities, clients) on production that are dependent on the components being changed
     validations:
       required: true
 
   - type: textarea
+    id: collection_backup
+    attributes:
+      label: Is collection backup required, for the script execution
+    validations:
+      required: true
+
+
+  - type: textarea
     id: services_at_risk
     attributes:
-      label: Services At Risk
-      description: Services that may be impacted
+      label: List of things working on production that are at risk of breaking because of this change
     validations:
       required: true
 
@@ -272,58 +361,69 @@ body:
   - type: input
     id: qa_test_report
     attributes:
-      label: QA Test Report Link
-      placeholder: URL to QA report
+      label: QA Test Report
+    validations:
+      required: true  
+
+  - type: textarea
+    id: testing_details
+    attributes:
+      label: Areas identified for testing and Regression
+    validations:
+      required: true
+
+  - type: textarea
+    id: testing_exceptions
+    attributes:
+      label: Are we bypassing any failure from testing?
+    validations:
+      required: true
+
+  - type: textarea
+    id: stage_validated
+    attributes:
+      label: Has the change been deployed and tested in STAGE environment
+    validations:
+      required: true
 
   - type: dropdown
     id: em_checked_code_diff
     attributes:
-      label: Has EM checked the code diff? Is it part of release notes?
+      label: Has EM checked the code diff? is it part of Release note?
       options:
         - "Yes"
         - "No"
-        - "NA"
     validations:
       required: true
 
   - type: dropdown
     id: qa_reviewed_design
     attributes:
-      label: Has QA team reviewed design documentation and integrations?
+      label: Has QA team seen the design document and understood all the associated integrations?
       options:
         - "Yes"
         - "No"
-        - "NA"
     validations:
       required: true
 
   - type: dropdown
     id: em_reviewed_test_report
     attributes:
-      label: Has EM reviewed the test report?
+      label: Has EM seen/reviewed the test report?
       options:
         - "Yes"
         - "No"
-        - "NA"
     validations:
       required: true
 
   - type: dropdown
     id: qa_tested_integrations
     attributes:
-      label: Has QA tested all integrations?
+      label: Has QA tested all integrations? Answer NA wherever not applicable
       options:
         - "Yes"
         - "No"
         - "NA"
-    validations:
-      required: true
-
-  - type: textarea
-    id: testing_details
-    attributes:
-      label: Testing Details
-      description: Summary of testing performed
     validations:
       required: true
 
@@ -331,7 +431,7 @@ body:
     attributes:
       value: |
         ## Controlled Launch Plan
-  
+
   - type: dropdown
     id: canary_deployment
     attributes:
@@ -341,37 +441,37 @@ body:
         - "No"
     validations:
       required: true
-  
+
   - type: textarea
     id: canary_deployment_details
     attributes:
-      label: Canary Deployment Details
-      description: Provide service name and rollout progression.
-      placeholder: |
-        Mandate Presentment Service - 1% -> 5% -> 20% -> 50% -> 100%
-
-        OR
-
-        Collections Service - 1% -> 10% -> 25% -> 50% -> 100%
-
-        Include:
-        - Service Name
-        - Traffic Rollout Plan
-        - Branch/Partner Scope
-        - Monitoring Criteria
+      label: Canary Deployment Details (The canary should be started with 1% traffic weight, 1 branch, partner)
     validations:
-      required: false
+      required: true
+  
+  - type: textarea
+    id: test_report
+    attributes:
+      label: Test Report for breaking changes ( discuss with the dependent EM, in case of any query)?
+    validations:
+      required: true
+
 
   - type: dropdown
     id: nginx_gateway_required
     attributes:
-      label: Nginx API Gateway Deployment Required?
+      label: Nginx API Gateway deployment required for Internal microservice?
       options:
         - "Yes"
         - "No"
     validations:
       required: true
-  
+
+  - type: input
+    id: nginx_caller_service
+    attributes:
+      label: Specify the Caller App/Service name(s) if Nginx deployment is selected "Yes"
+
   - type: dropdown
     id: controlled_launch
     attributes:
@@ -381,6 +481,8 @@ body:
         - "No"
     validations:
       required: true
+
+
 
   - type: textarea
     id: launch_plan_details
@@ -397,7 +499,7 @@ body:
   - type: dropdown
     id: aws_config_change
     attributes:
-      label: Application Configurations (Node ENV, AWS Parameter Store)
+      label: AWS Config Changes
       options:
         - "Yes"
         - "No"
@@ -413,10 +515,27 @@ body:
       required: true
 
   - type: textarea
+    id: application_configurations
+    attributes:
+      label: Application Configurations(Node EWS, AWS Paramstore)
+      options: 
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+
+  - type: textarea
     id: configuration_details
     attributes:
-      label: Configuration Details
-      description: Secrets, Parameter Store, ENV variables, etc.
+      label: Application Configurations Details
+    validations:
+      required: true
+
+  - type: input
+    id: apigee_reference_url
+    attributes:
+      label: Apigee reference to onboard URL
+      placeholder: https://...
 
   - type: markdown
     attributes:
@@ -429,11 +548,18 @@ body:
       label: Implementation Plan
     validations:
       required: true
+  
+  - type: textarea
+    id: post_implementation
+    attributes:
+      label: Post Implementation Monitoring Plan
+    validations:
+      required: true
 
   - type: textarea
     id: monitoring_plan
     attributes:
-      label: Post Implementation Monitoring Plan
+      label: List of functional metrics to monitor and details of what needs to be monitored (what values of metrics will tell us working fine VS some issues)
     validations:
       required: true
 
@@ -443,7 +569,15 @@ body:
       label: Rollback Plan
     validations:
       required: true
-
+  
+  - type: input
+    id: assignee_id
+    attributes:
+      label: Assignee
+      placeholder: GitHub Username
+    validations:
+      required: true
+  
   - type: markdown
     attributes:
       value: |
@@ -452,7 +586,7 @@ body:
   - type: input
     id: level1_ux_qa
     attributes:
-      label: Level-1 UX Design QA
+      label: Level-1 UX Design QA [After fixing all the UX Blockers]
       placeholder: GitHub Username
     validations:
       required: true
@@ -460,7 +594,7 @@ body:
   - type: input
     id: level2_architecture
     attributes:
-      label: Level-2 Architecture
+      label: Level-2 Architecture [To be approved by SDE3+]
       placeholder: GitHub Username
     validations:
       required: true
@@ -496,3 +630,5 @@ body:
       placeholder: GitHub Username
     validations:
       required: true
+    
+    
