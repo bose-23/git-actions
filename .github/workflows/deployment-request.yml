@@ -58,10 +58,44 @@ jobs:
             function extractField(fieldName) {
               const escapedField = escapeRegex(fieldName);
 
-              const regex = new RegExp(
-                escapedField + "\\s*\\n([^\\n]+)",
-                "i"
+              const fieldRegex = new RegExp(
+                `${escapedField}\\s*\\n([\\s\\S]*?)(?=\\n[A-Z][^\\n]*\\n|$)`,
+                "m"
               );
+
+              const match = issueBody.match(fieldRegex);
+
+              if (!match) {
+                console.log(`Field not found: ${fieldName}`);
+                return "Not Provided";
+              }
+
+              return match[1]
+                .replace(/<br\\s*\\/?>/gi, "\n")
+                .replace(/<\\/li>/gi, "\n")
+                .replace(/<li[^>]*>/gi, "- ")
+                .replace(/<ol[^>]*>/gi, "")
+                .replace(/<\\/ol>/gi, "")
+                .replace(/<em[^>]*>No response<\\/em>/gi, "Not Provided")
+                .replace(/<[^>]+>/g, "")
+                .trim();
+            }
+
+            function extractApprover(fieldName) {
+              const value = extractField(fieldName);
+
+              if (
+                !value ||
+                value === "Not Provided"
+              ) {
+                return "";
+              }
+
+              return value
+                .split("\n")[0]
+                .replace("@", "")
+                .trim();
+            }
 
               const match = issueBody.match(regex);
 
