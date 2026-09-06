@@ -19,48 +19,55 @@ jobs:
         with:
           script: |
 
-            const issueNumber = context.issue.number;
+            
             const comment = context.payload.comment.body.trim();
             const commenter = context.payload.comment.user.login;
-
+            const issueNumber = context.issue.number; 
             const issue = await github.rest.issues.get({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: issueNumber
             });
 
-            const body = issue.data.body || "";
+            
+            const issueBody = context.payload.issue.body || "";
 
-            function extractApprover(fieldName) {
-              const regex = new RegExp(
-                fieldName + "\\s*\\n([^\\n]+)",
-                "i"
-              );
-
-              const match = body.match(regex);
-
-              if (!match) {
-                return "";
-              }
-
-              return match[1].trim().replace("@", "");
+            function escapeRegex(str) {
+              return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
             }
 
             function extractField(fieldName) {
+              const escapedField = escapeRegex(fieldName);
 
               const regex = new RegExp(
-                fieldName + "\\s*\\n([^\\n]+)",
+                `${escapedField}\\s*\\n([^\\n]+)`,
                 "i"
               );
 
-              const match = body.match(regex);
+              const match = issueBody.match(regex);
 
               if (!match) {
+                console.log(`Field not found: ${fieldName}`);
                 return "Not Provided";
               }
 
               return match[1].trim();
             }
+
+            function extractApprover(fieldName) {
+              const value = extractField(fieldName);
+
+              if (
+                !value ||
+                value === "Not Provided" ||
+                value.includes("No response")
+              ) {
+                return "";
+              }
+
+              return value.replace("@", "").trim();
+            }
+
 
             const level1Approver = extractApprover("Level-1 UX Design QA [After fixing all the UX Blockers]");
             const level2Approver = extractApprover("Level-2 Architecture [To be approved by SDE3+]");
