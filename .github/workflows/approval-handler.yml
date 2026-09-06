@@ -62,8 +62,8 @@ jobs:
               return match[1].trim();
             }
 
-            const level1Approver = extractApprover("Level-1 UX Design QA");
-            const level2Approver = extractApprover("Level-2 Architecture");
+            const level1Approver = extractApprover("Level-1 UX Design QA [After fixing all the UX Blockers]");
+            const level2Approver = extractApprover("Level-2 Architecture [To be approved by SDE3+]");
             const level3Approver = extractApprover("Level-3 Infosec Lead");
             const level4Approver = extractApprover("Level-4 Manager");
             const level5Approver = extractApprover("Level-5 QA");
