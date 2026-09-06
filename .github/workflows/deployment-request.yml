@@ -71,14 +71,7 @@ jobs:
               }
 
               return match[1]
-                .replace(/<br\\s*\\/?>/gi, "\n")
-                .replace(/<\\/li>/gi, "\n")
-                .replace(/<li[^>]*>/gi, "- ")
-                .replace(/<ol[^>]*>/gi, "")
-                .replace(/<\\/ol>/gi, "")
-                .replace(/<em[^>]*>No response<\\/em>/gi, "Not Provided")
-                .replace(/<[^>]+>/g, "")
-                .trim();
+              
             }
 
             function extractApprover(fieldName) {
