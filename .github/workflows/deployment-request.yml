@@ -59,8 +59,8 @@ jobs:
               const escapedField = escapeRegex(fieldName);
 
               const regex = new RegExp(
-                escapedField + "\\s*\\n([\\s\\S]*?)(?=\\n(?:Application Name|Change Category|CMSTP for Team|CMSTP Execution Owner|Change Type|Priority|Change Description|Components|Labels|Planned Start Time|Planned End Time|Notification to Product Manager|Notification to Business User|Compare From|Compare To|No of Branches Impacted|No of EF Partners Impacted|No of Tech Products Impacted|No of Loan Products Impacted|List of dependencies for this change to successfully work on production|List of modules \\(services, functionalities, clients\\) on production that are dependent on the components being changed|Is collection backup required, for the script execution|List of things working on production that are at risk of breaking because of this change|QA - Test Report\\?|QA Test Report|Areas identified for testing and Regression|Are we bypassing any failure from testing\\?|Has the change been deployed and tested in STAGE environment|Has EM checked the code diff\\? is it part of Release note\\?|Has QA team seen the design document and understood all the associated integrations\\?|Has EM seen/reviewed the test report\\?|Has QA tested all integrations\\? Answer NA wherever not applicable|Canary Deployment|Canary Deployment Details \\(The canary should be started with 1% traffic weight, 1 branch, partner\\)|Test Report for breaking changes \\( discuss with the dependent EM, in case of any query\\)\\?|Nginx API Gateway deployment required for Internal microservice\\?|Specify the Caller App\\/Service name\\(s\\) if Nginx deployment is selected "Yes"|Controlled Launch Plan|Launch Plan Details|AWS Config Changes|Config Version|Application Configurations\\(Node EWS, AWS Paramstore\\)|Application Configurations Details|Apigee reference to onboard URL|Implementation Plan|Post Implementation Monitoring Plan|List of functional metrics to monitor and details of what needs to be monitored \\(what values of metrics will tell us working fine VS some issues\\)|Rollback Plan|Assignee|Level-1 UX Design QA \\[After fixing all the UX Blockers\\]|Level-2 Architecture \\[To be approved by SDE3\\+\\]|Level-3 Infosec Lead|Level-4 Manager|Level-5 QA|Level-6 DoE)\\n|$)",
-                "m"
+                `${escapedField}\\s*\\n([^\\n]+)`,
+                "i"
               );
 
               const match = issueBody.match(regex);
@@ -86,6 +86,7 @@ jobs:
 
               return value.replace("@", "").trim();
             }
+
 
             const level1Approver = extractApprover("Level-1 UX Design QA [After fixing all the UX Blockers]");
             const level2Approver = extractApprover("Level-2 Architecture [To be approved by SDE3+]");
