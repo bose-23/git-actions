@@ -51,11 +51,41 @@ jobs:
             const issueNumber = context.issue.number;
             const issueBody = context.payload.issue.body || "";
 
-            function extractApprover(fieldName) {
+            function escapeRegex(str) {
+              return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+            }
+
+            function extractField(fieldName) {
+              const escapedField = escapeRegex(fieldName);
+
               const regex = new RegExp(
-                fieldName + "\\s*\\n([^\\n]+)",
+                escapedField + "\\s*\\n([^\\n]+)",
                 "i"
               );
+
+              const match = issueBody.match(regex);
+
+              if (!match) {
+                console.log(`Field not found: ${fieldName}`);
+                return "Not Provided";
+              }
+
+              return match[1].trim();
+            }
+
+            function extractApprover(fieldName) {
+              const value = extractField(fieldName);
+
+              if (
+                !value ||
+                value === "Not Provided" ||
+                value.includes("No response")
+              ) {
+                return "";
+              }
+
+              return value.replace("@", "").trim();
+            }
 
               const match = issueBody.match(regex);
 
