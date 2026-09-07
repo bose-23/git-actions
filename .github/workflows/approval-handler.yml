@@ -37,21 +37,21 @@ jobs:
             }
 
             function extractField(fieldName) {
-              const escapedField = escapeRegex(fieldName);
+            const escapedField = escapeRegex(fieldName);
 
-              const regex = new RegExp(
-                `${escapedField}\\s*\\n([^\\n]+)`,
-                "i"
-              );
+            const regex = new RegExp(
+              `${escapedField}\\s*\\r?\\n([\\s\\S]*?)(?=\\r?\\n###|$)`,
+              "i"
+            );
 
-              const match = issueBody.match(regex);
+            const match = issueBody.match(regex);
 
-              if (!match) {
-                console.log(`Field not found: ${fieldName}`);
-                return "Not Provided";
-              }
+            if (!match) {
+              console.log(`Field not found: ${fieldName}`);
+              return "Not Provided";
+            }
 
-              return match[1].trim();
+            return match[1].trim();
             }
 
             function extractApprover(fieldName) {
@@ -67,6 +67,7 @@ jobs:
 
               return value.replace("@", "").trim();
             }
+
 
 
             const level1Approver = extractApprover("Level-1 UX Design QA [After fixing all the UX Blockers]");
