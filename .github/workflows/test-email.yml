@@ -1,0 +1,23 @@
+name: Test GitHub User Email
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get User Details
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const username = 'bose-23';
+
+            const user = await github.request(
+              'GET /users/{username}',
+              { username }
+            );
+
+            console.log('Username:', user.data.login);
+            console.log('Email:', user.data.email);
