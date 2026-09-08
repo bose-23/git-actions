@@ -89,6 +89,17 @@ jobs:
 
 
             const level1Approver = extractApprover("Level-1 UX Design QA [After fixing all the UX Blockers]");
+
+            const l1User = await github.request(
+              'GET /users/{username}',
+              {
+                username: level1Approver
+              }
+            );
+
+            const l1Email = l1User.data.email;
+
+
             const level2Approver = extractApprover("Level-2 Architecture [To be approved by SDE3+]");
             const level3Approver = extractApprover("Level-3 Infosec Lead");
             const level4Approver = extractApprover("Level-4 Manager");
@@ -375,3 +386,28 @@ jobs:
                 "\n\nUse:" +
                 "\n/approve-level1"
             });
+
+            await fetch(
+              "https://qa.pchf.in/api/v1/notification/email",
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                  toList: [l1Email],
+                  ccList: null,
+                  bccList: null,
+                  replyTo: "noreply@pchf.in",
+                  from: "noreply@pchf.in",
+                  body: {
+                    var1: level1Approver,
+                    var2: `Deployment Request #${issueNumber}`,
+                    var3: context.payload.issue.html_url
+                  },
+                  templateName: "TestEmailAppsmith",
+                  subject: "Level-1 Approval Required",
+                  attachmentList: null
+                })
+              }
+            );
