@@ -1,5 +1,15 @@
-name: Test DNS
-  run: |
-    nslookup qa.pchf.in || true
-    ping -c 2 qa.pchf.in || true
-    curl -I https://qa.pchf.in || true
+name: Test Server
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Test DNS
+        run: |
+          nslookup qa.pchf.in || true
+          ping -c 2 qa.pchf.in || true
+          curl -I https://qa.pchf.in || true
